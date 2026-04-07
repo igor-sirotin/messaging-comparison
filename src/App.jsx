@@ -677,19 +677,66 @@ const categories = {
   prerelease: { label: "Pre-Release", color: "#f97316", desc: "In active development — not yet shipped" },
 };
 
+// ── Real brand logos from /public/logos/ ──────────────────────────────────────
+
+const logoFiles = {
+  "Signal":                    "signal.svg",
+  "Matrix / Element":          "matrix.svg",
+  "Session":                   "session.svg",
+  "SimpleX Chat":              "simplex.svg",
+  "Briar":                     "briar.svg",
+  "Status":                    "status.webp",
+  "Logos Chat (Chat SDK)":     "logos.svg",
+  "XMPP (Conversations, etc.)":"xmpp.svg",
+  "Tox":                       "tox.svg",
+  "DarkFi (DarkIRC)":          "darkfi.svg",
+  "XMTP":                      "xmtp.svg",
+  "Delta Chat":                "deltachat.svg",
+};
+
+function AppLogo({ name, size = 36 }) {
+  const file = logoFiles[name];
+  const radius = Math.round(size * 0.2);
+  if (file) {
+    return (
+      <img
+        src={`/logos/${file}`}
+        width={size}
+        height={size}
+        alt={name}
+        style={{ borderRadius: radius, display: "block", objectFit: "cover", flexShrink: 0 }}
+      />
+    );
+  }
+  // Fallback
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <rect width="40" height="40" rx="8" fill="#3a3a5a"/>
+      <text x="20" y="26" textAnchor="middle" fontSize="18" fontWeight="700" fill="white" fontFamily="system-ui, sans-serif">
+        {name.charAt(0).toUpperCase()}
+      </text>
+    </svg>
+  );
+}
+
+// ── Utility icons ─────────────────────────────────────────────────────────────
+
 const CheckIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path d="M3 8.5L6.5 12L13 4" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+    <circle cx="7.5" cy="7.5" r="7.5" fill="#10b98122"/>
+    <path d="M4 7.5L6.5 10L11 5" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 const XIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path d="M4 4L12 12M12 4L4 12" stroke="#ef4444" strokeWidth="2" strokeLinecap="round"/>
+  <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+    <circle cx="7.5" cy="7.5" r="7.5" fill="#ef444420"/>
+    <path d="M5 5L10 10M10 5L5 10" stroke="#ef4444" strokeWidth="1.8" strokeLinecap="round"/>
   </svg>
 );
 const PartialIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path d="M3 8H13" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round"/>
+  <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+    <circle cx="7.5" cy="7.5" r="7.5" fill="#f59e0b18"/>
+    <path d="M4 7.5H11" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round"/>
   </svg>
 );
 
@@ -699,88 +746,115 @@ function BoolCell({ value }) {
   return <PartialIcon />;
 }
 
+// ── Feature tag — neutral, unified style ──────────────────────────────────────
+
+function FeatureTag({ label }) {
+  return (
+    <span style={{
+      fontSize: "10px",
+      fontWeight: 600,
+      padding: "2px 8px",
+      borderRadius: "4px",
+      background: "#1e1e38",
+      color: "#8888bb",
+      border: "1px solid #2a2a48",
+      fontFamily: "'JetBrains Mono', monospace",
+      letterSpacing: "0.3px",
+    }}>
+      {label}
+    </span>
+  );
+}
+
+// ── App card ──────────────────────────────────────────────────────────────────
+
 function AppCard({ app, onSelect }) {
   const cat = categories[app.category];
   return (
     <div
       onClick={() => onSelect(app)}
       style={{
-        background: "#1a1a2e",
-        border: "1px solid #2a2a4a",
-        borderRadius: "12px",
+        background: "#111120",
+        border: "1px solid #1e1e35",
+        borderRadius: "14px",
         padding: "20px",
         cursor: "pointer",
-        transition: "all 0.25s ease",
+        transition: "border-color 0.2s, box-shadow 0.2s, transform 0.2s",
         position: "relative",
         overflow: "hidden",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = cat.color;
+        e.currentTarget.style.borderColor = `${cat.color}70`;
         e.currentTarget.style.transform = "translateY(-2px)";
-        e.currentTarget.style.boxShadow = `0 8px 30px ${cat.color}22`;
+        e.currentTarget.style.boxShadow = `0 8px 32px ${cat.color}18`;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "#2a2a4a";
+        e.currentTarget.style.borderColor = "#1e1e35";
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = "none";
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-        <span style={{ fontSize: "24px" }}>{app.icon}</span>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: "18px", color: "#e0e0ff" }}>{app.name}</span>
+      {/* Subtle category accent bar */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, ${cat.color}60, transparent)`, borderRadius: "14px 14px 0 0" }} />
+
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "10px" }}>
+        <div style={{ flexShrink: 0 }}>
+          <AppLogo name={app.name} size={36} />
+        </div>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: "16px", color: "#e0e0ff", lineHeight: 1.2, marginBottom: "4px" }}>
+            {app.name}
+          </div>
+          <div style={{
+            display: "inline-block",
+            padding: "1px 8px",
+            borderRadius: "20px",
+            fontSize: "10px",
+            fontWeight: 600,
+            letterSpacing: "0.5px",
+            textTransform: "uppercase",
+            background: `${cat.color}18`,
+            color: cat.color,
+            border: `1px solid ${cat.color}35`,
+          }}>
+            {cat.label}
+          </div>
+        </div>
       </div>
-      <div style={{
-        display: "inline-block",
-        padding: "2px 10px",
-        borderRadius: "20px",
-        fontSize: "11px",
-        fontWeight: 600,
-        letterSpacing: "0.5px",
-        textTransform: "uppercase",
-        background: `${cat.color}20`,
-        color: cat.color,
-        border: `1px solid ${cat.color}40`,
-        marginBottom: "10px",
-      }}>
-        {cat.label}
-      </div>
-      <p style={{ color: "#8888aa", fontSize: "13px", lineHeight: 1.5, margin: 0 }}>{app.tagline}</p>
+
+      <p style={{ color: "#7777aa", fontSize: "12.5px", lineHeight: 1.55, margin: "0 0 12px 0" }}>{app.tagline}</p>
+
       {app.maturity && (
         <div style={{
-          marginTop: "8px", padding: "4px 10px", borderRadius: "6px",
-          background: "#f9731615", border: "1px dashed #f9731650",
-          fontSize: "11px", color: "#f97316", fontFamily: "'JetBrains Mono', monospace",
-          display: "inline-block",
+          marginBottom: "10px", padding: "3px 9px", borderRadius: "5px",
+          background: "#f9731610", border: "1px solid #f9731630",
+          fontSize: "10px", color: "#f97316", fontFamily: "'JetBrains Mono', monospace",
+          display: "inline-block", letterSpacing: "0.3px",
         }}>
-          ⚙ {app.maturity}
+          IN DEV — {app.maturity}
         </div>
       )}
-      <div style={{ marginTop: "14px", display: "flex", gap: "6px", flexWrap: "wrap" }}>
-        {app.pfs && <MiniTag label="PFS" color="#10b981" />}
-        {app.quantumResistant && <MiniTag label="PQ" color="#6366f1" />}
-        {app.noPhoneRequired && <MiniTag label="No Phone" color="#f59e0b" />}
-        {app.selfHostable && <MiniTag label="Self-Host" color="#ec4899" />}
-        {app.p2p && <MiniTag label="P2P" color="#06b6d4" />}
-        {app.offlineCapable && <MiniTag label="Offline" color="#84cc16" />}
+
+      <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
+        {app.pfs && <FeatureTag label="PFS" />}
+        {app.quantumResistant && <FeatureTag label="Post-Quantum" />}
+        {app.noPhoneRequired && <FeatureTag label="No Phone" />}
+        {app.selfHostable && <FeatureTag label="Self-Host" />}
+        {app.p2p && <FeatureTag label="P2P" />}
+        {app.offlineCapable && <FeatureTag label="Offline" />}
       </div>
     </div>
   );
 }
 
-function MiniTag({ label, color }) {
+// ── Detail modal ──────────────────────────────────────────────────────────────
+
+function SectionHeader({ color, children }) {
   return (
-    <span style={{
-      fontSize: "10px",
-      fontWeight: 600,
-      padding: "2px 7px",
-      borderRadius: "4px",
-      background: `${color}18`,
-      color: color,
-      border: `1px solid ${color}30`,
-      fontFamily: "'JetBrains Mono', monospace",
-    }}>
-      {label}
-    </span>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+      <div style={{ width: "3px", height: "16px", background: color, borderRadius: "2px", flexShrink: 0 }} />
+      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", fontWeight: 700, color, textTransform: "uppercase", letterSpacing: "1.5px" }}>{children}</span>
+    </div>
   );
 }
 
@@ -789,38 +863,56 @@ function DetailModal({ app, onClose }) {
   return (
     <div style={{
       position: "fixed", inset: 0, zIndex: 1000,
-      background: "rgba(0,0,0,0.8)",
-      backdropFilter: "blur(8px)",
+      background: "rgba(0,0,0,0.85)",
+      backdropFilter: "blur(10px)",
       display: "flex", alignItems: "flex-start", justifyContent: "center",
       padding: "40px 20px",
       overflowY: "auto",
     }} onClick={onClose}>
       <div style={{
-        background: "#12122a",
-        border: `1px solid ${cat.color}40`,
-        borderRadius: "16px",
-        maxWidth: "800px",
+        background: "#0e0e1e",
+        border: `1px solid ${cat.color}35`,
+        borderRadius: "18px",
+        maxWidth: "820px",
         width: "100%",
-        padding: "32px",
+        padding: "36px",
         position: "relative",
+        boxShadow: `0 24px 80px ${cat.color}12`,
       }} onClick={(e) => e.stopPropagation()}>
+
+        {/* Top accent line */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, ${cat.color}, ${cat.color}00)`, borderRadius: "18px 18px 0 0" }} />
+
         <button onClick={onClose} style={{
-          position: "absolute", top: "16px", right: "16px",
-          background: "none", border: "none", color: "#666", fontSize: "24px", cursor: "pointer",
+          position: "absolute", top: "18px", right: "18px",
+          background: "#1a1a30", border: "1px solid #2a2a45",
+          color: "#7777aa", fontSize: "18px", cursor: "pointer",
+          width: "32px", height: "32px", borderRadius: "8px",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          lineHeight: 1,
         }}>×</button>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "6px" }}>
-          <span style={{ fontSize: "32px" }}>{app.icon}</span>
-          <h2 style={{ margin: 0, fontFamily: "'JetBrains Mono', monospace", color: "#e0e0ff", fontSize: "26px" }}>{app.name}</h2>
+        {/* App header */}
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "8px" }}>
+          <AppLogo name={app.name} size={48} />
+          <div>
+            <h2 style={{ margin: "0 0 6px 0", fontFamily: "'JetBrains Mono', monospace", color: "#e8e8ff", fontSize: "24px", fontWeight: 700 }}>{app.name}</h2>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: "6px",
+              padding: "3px 12px", borderRadius: "20px", fontSize: "11px",
+              fontWeight: 600, letterSpacing: "0.5px", textTransform: "uppercase",
+              background: `${cat.color}18`, color: cat.color, border: `1px solid ${cat.color}35`,
+            }}>
+              <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: cat.color }} />
+              {cat.label} — {cat.desc}
+            </div>
+          </div>
         </div>
-        <div style={{
-          display: "inline-block", padding: "3px 12px", borderRadius: "20px", fontSize: "11px",
-          fontWeight: 600, letterSpacing: "0.5px", textTransform: "uppercase",
-          background: `${cat.color}20`, color: cat.color, border: `1px solid ${cat.color}40`,
-          marginBottom: "20px",
-        }}>{cat.label} — {cat.desc}</div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "24px" }}>
+        <p style={{ color: "#7777aa", fontSize: "13px", lineHeight: 1.6, margin: "0 0 24px 0" }}>{app.tagline}</p>
+
+        {/* Info grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "24px" }}>
           {[
             ["Protocol", app.protocol],
             ["Architecture", app.architecture],
@@ -834,14 +926,15 @@ function DetailModal({ app, onClose }) {
             ["User Base", app.userBase],
             ...(app.maturity ? [["Maturity", app.maturity]] : []),
           ].map(([k, v]) => (
-            <div key={k} style={{ background: "#1a1a35", borderRadius: "8px", padding: "10px 14px" }}>
-              <div style={{ color: "#6666aa", fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>{k}</div>
-              <div style={{ color: "#c0c0dd", fontSize: "13px", lineHeight: 1.4 }}>{v}</div>
+            <div key={k} style={{ background: "#14142a", borderRadius: "8px", padding: "10px 14px", border: "1px solid #1e1e38" }}>
+              <div style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px", color: "#55558a" }}>{k}</div>
+              <div style={{ color: "#b8b8d8", fontSize: "12.5px", lineHeight: 1.4 }}>{v}</div>
             </div>
           ))}
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "8px", marginBottom: "24px" }}>
+        {/* Feature booleans */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(145px, 1fr))", gap: "7px", marginBottom: "28px" }}>
           {[
             ["Perfect Forward Secrecy", app.pfs],
             ["Post-Compromise Security", app.postCompromise],
@@ -854,70 +947,76 @@ function DetailModal({ app, onClose }) {
             ["Offline Capable", app.offlineCapable],
             ["Voice/Video", app.voiceVideo],
             ["Multi-Device", app.multiDevice],
-            ["Audited", app.audited],
+            ["Security Audited", app.audited],
           ].map(([label, val]) => (
             <div key={label} style={{
-              background: "#1a1a35", borderRadius: "8px", padding: "8px 10px",
+              background: "#14142a", borderRadius: "7px", padding: "8px 10px",
               display: "flex", alignItems: "center", gap: "8px",
+              border: "1px solid #1e1e38",
             }}>
               <BoolCell value={val} />
-              <span style={{ fontSize: "11px", color: "#9999bb" }}>{label}</span>
+              <span style={{ fontSize: "11px", color: "#8888bb", lineHeight: 1.3 }}>{label}</span>
             </div>
           ))}
         </div>
 
+        {/* Pros */}
         <div style={{ marginBottom: "20px" }}>
-          <h3 style={{ color: "#10b981", fontFamily: "'JetBrains Mono', monospace", fontSize: "14px", marginBottom: "10px" }}>✦ STRENGTHS</h3>
+          <SectionHeader color="#10b981">Strengths</SectionHeader>
           {app.pros.map((p, i) => (
-            <div key={i} style={{ display: "flex", gap: "8px", marginBottom: "6px", alignItems: "flex-start" }}>
-              <span style={{ color: "#10b981", flexShrink: 0, marginTop: "2px" }}>▸</span>
-              <span style={{ color: "#b0b0cc", fontSize: "13px", lineHeight: 1.5 }}>{p}</span>
+            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                <circle cx="7" cy="7" r="3" fill="#10b981" opacity="0.7"/>
+              </svg>
+              <span style={{ color: "#a8a8c8", fontSize: "13px", lineHeight: 1.55 }}>{p}</span>
             </div>
           ))}
         </div>
 
+        {/* Cons */}
         <div style={{ marginBottom: "20px" }}>
-          <h3 style={{ color: "#ef4444", fontFamily: "'JetBrains Mono', monospace", fontSize: "14px", marginBottom: "10px" }}>✦ WEAKNESSES</h3>
+          <SectionHeader color="#ef4444">Weaknesses</SectionHeader>
           {app.cons.map((c, i) => (
-            <div key={i} style={{ display: "flex", gap: "8px", marginBottom: "6px", alignItems: "flex-start" }}>
-              <span style={{ color: "#ef4444", flexShrink: 0, marginTop: "2px" }}>▸</span>
-              <span style={{ color: "#b0b0cc", fontSize: "13px", lineHeight: 1.5 }}>{c}</span>
+            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                <circle cx="7" cy="7" r="3" fill="#ef4444" opacity="0.7"/>
+              </svg>
+              <span style={{ color: "#a8a8c8", fontSize: "13px", lineHeight: 1.55 }}>{c}</span>
             </div>
           ))}
         </div>
 
-        <div>
-          <h3 style={{ color: "#f59e0b", fontFamily: "'JetBrains Mono', monospace", fontSize: "14px", marginBottom: "10px" }}>✦ CENTRALIZATION POINTS</h3>
+        {/* Centralization points */}
+        <div style={{ marginBottom: "24px" }}>
+          <SectionHeader color="#f59e0b">Centralization Points</SectionHeader>
           {app.centralizationPoints.map((c, i) => (
-            <div key={i} style={{ display: "flex", gap: "8px", marginBottom: "6px", alignItems: "flex-start" }}>
-              <span style={{ color: "#f59e0b", flexShrink: 0, marginTop: "2px" }}>⚠</span>
-              <span style={{ color: "#b0b0cc", fontSize: "13px", lineHeight: 1.5 }}>{c}</span>
+            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                <path d="M7 2.5 L7 8" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="7" cy="10.5" r="1.2" fill="#f59e0b"/>
+              </svg>
+              <span style={{ color: "#a8a8c8", fontSize: "13px", lineHeight: 1.55 }}>{c}</span>
             </div>
           ))}
         </div>
 
-        <div style={{ marginTop: "20px", padding: "12px 16px", background: "#1a1a35", borderRadius: "8px" }}>
-          <div style={{ color: "#6666aa", fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Metadata Protection</div>
-          <div style={{ color: "#c0c0dd", fontSize: "13px", lineHeight: 1.5 }}>{app.metadataProtection}</div>
-        </div>
-
-        {app.rateLimiting && (
-          <div style={{ marginTop: "10px", padding: "12px 16px", background: "#1a1a35", borderRadius: "8px" }}>
-            <div style={{ color: "#6666aa", fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Rate Limiting / Spam Protection</div>
-            <div style={{ color: "#c0c0dd", fontSize: "13px", lineHeight: 1.5 }}>{app.rateLimiting}</div>
+        {/* Metadata / rate limiting / offline delivery */}
+        {[
+          ["Metadata Protection", app.metadataProtection],
+          ["Rate Limiting & Spam Protection", app.rateLimiting],
+          ["Offline Message Delivery", app.offlineDelivery],
+        ].filter(([, v]) => v).map(([label, val]) => (
+          <div key={label} style={{ marginBottom: "10px", padding: "12px 16px", background: "#14142a", borderRadius: "8px", border: "1px solid #1e1e38" }}>
+            <div style={{ color: "#55558a", fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "5px" }}>{label}</div>
+            <div style={{ color: "#b0b0cc", fontSize: "12.5px", lineHeight: 1.6 }}>{val}</div>
           </div>
-        )}
-
-        {app.offlineDelivery && (
-          <div style={{ marginTop: "10px", padding: "12px 16px", background: "#1a1a35", borderRadius: "8px" }}>
-            <div style={{ color: "#6666aa", fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Offline Message Delivery</div>
-            <div style={{ color: "#c0c0dd", fontSize: "13px", lineHeight: 1.5 }}>{app.offlineDelivery}</div>
-          </div>
-        )}
+        ))}
       </div>
     </div>
   );
 }
+
+// ── Comparison table ──────────────────────────────────────────────────────────
 
 function ComparisonTable({ selected }) {
   const features = [
@@ -942,8 +1041,8 @@ function ComparisonTable({ selected }) {
   ];
 
   if (selected.length < 2) return (
-    <div style={{ textAlign: "center", padding: "40px", color: "#6666aa", fontFamily: "'JetBrains Mono', monospace", fontSize: "14px" }}>
-      Select 2+ apps above to compare side-by-side
+    <div style={{ textAlign: "center", padding: "60px 40px", fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", color: "#55558a" }}>
+      Select 2 or more apps above to compare side-by-side
     </div>
   );
 
@@ -951,25 +1050,28 @@ function ComparisonTable({ selected }) {
     <div style={{ overflowX: "auto", marginTop: "16px" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
         <thead>
-          <tr>
-            <th style={{ textAlign: "left", padding: "10px 14px", color: "#6666aa", fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", textTransform: "uppercase", letterSpacing: "1px", borderBottom: "1px solid #2a2a4a" }}>Feature</th>
+          <tr style={{ borderBottom: "1px solid #1e1e38" }}>
+            <th style={{ textAlign: "left", padding: "10px 16px", color: "#55558a", fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "1px" }}>Feature</th>
             {selected.map(a => (
-              <th key={a.name} style={{ textAlign: "center", padding: "10px 14px", color: categories[a.category].color, fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", borderBottom: "1px solid #2a2a4a", minWidth: "140px" }}>
-                {a.icon} {a.name}
+              <th key={a.name} style={{ textAlign: "center", padding: "10px 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", minWidth: "150px" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
+                  <AppLogo name={a.name} size={28} />
+                  <span style={{ color: categories[a.category].color, fontSize: "11px", fontWeight: 700 }}>{a.name}</span>
+                </div>
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {features.map((f, i) => (
-            <tr key={f.key} style={{ background: i % 2 === 0 ? "#14142e" : "transparent" }}>
-              <td style={{ padding: "8px 14px", color: "#9999bb", fontWeight: 500, borderBottom: "1px solid #1a1a35", whiteSpace: "nowrap" }}>{f.label}</td>
+            <tr key={f.key} style={{ background: i % 2 === 0 ? "#0e0e1e" : "transparent" }}>
+              <td style={{ padding: "9px 16px", color: "#7777aa", fontWeight: 500, borderBottom: "1px solid #14142a", whiteSpace: "nowrap", fontSize: "12px" }}>{f.label}</td>
               {selected.map(a => (
-                <td key={a.name} style={{ padding: "8px 14px", textAlign: "center", color: "#c0c0dd", borderBottom: "1px solid #1a1a35" }}>
+                <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
                   {f.bool ? (
                     <div style={{ display: "flex", justifyContent: "center" }}><BoolCell value={a[f.key]} /></div>
                   ) : (
-                    <span style={{ fontSize: "12px", lineHeight: 1.4 }}>{a[f.key]}</span>
+                    <span style={{ fontSize: "11.5px", lineHeight: 1.4 }}>{a[f.key]}</span>
                   )}
                 </td>
               ))}
@@ -980,6 +1082,8 @@ function ComparisonTable({ selected }) {
     </div>
   );
 }
+
+// ── Main app ──────────────────────────────────────────────────────────────────
 
 export default function DecentralizedMessengerComparison() {
   const [selectedApp, setSelectedApp] = useState(null);
@@ -999,87 +1103,89 @@ export default function DecentralizedMessengerComparison() {
 
   return (
     <div style={{
-      background: "#0d0d1f",
+      background: "#09091a",
       minHeight: "100vh",
       color: "#e0e0ff",
       fontFamily: "'Segoe UI', system-ui, sans-serif",
     }}>
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "32px 20px" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px" }}>
+
         {/* Header */}
-        <div style={{ marginBottom: "32px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", color: "#6366f1", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase" }}>
-              Comparative Analysis
-            </span>
+        <div style={{ marginBottom: "36px" }}>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "#6366f1", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>
+            Comparative Analysis
           </div>
           <h1 style={{
             fontFamily: "'JetBrains Mono', monospace",
-            fontSize: "clamp(24px, 4vw, 36px)",
+            fontSize: "clamp(22px, 4vw, 34px)",
             fontWeight: 700,
-            margin: "0 0 8px 0",
-            background: "linear-gradient(135deg, #e0e0ff, #6366f1)",
+            margin: "0 0 10px 0",
+            background: "linear-gradient(135deg, #d0d0f8 0%, #7878e0 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             lineHeight: 1.2,
           }}>
             Decentralized Messaging Apps
           </h1>
-          <p style={{ color: "#6666aa", fontSize: "14px", maxWidth: "700px", lineHeight: 1.6, margin: 0 }}>
+          <p style={{ color: "#6060a0", fontSize: "13.5px", maxWidth: "680px", lineHeight: 1.7, margin: 0 }}>
             An honest look at 12 messaging platforms — their architectures, encryption strengths, centralization trade-offs, and real-world drawbacks. Nothing is truly decentralized; the question is where the centralization hides.
           </p>
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: "4px", marginBottom: "20px", borderBottom: "1px solid #2a2a4a", paddingBottom: "0" }}>
-          {[["overview", "All Apps"], ["compare", `Compare (${compareList.length})`]].map(([id, label]) => (
+        <div style={{ display: "flex", gap: "4px", marginBottom: "24px", borderBottom: "1px solid #1e1e35" }}>
+          {[["overview", "All Apps"], ["compare", `Compare${compareList.length > 0 ? ` (${compareList.length})` : ""}`]].map(([id, label]) => (
             <button key={id} onClick={() => setActiveTab(id)} style={{
-              background: activeTab === id ? "#1a1a3a" : "transparent",
+              background: activeTab === id ? "#13132a" : "transparent",
               border: "1px solid",
-              borderColor: activeTab === id ? "#3a3a6a" : "transparent",
-              borderBottom: activeTab === id ? "1px solid #1a1a3a" : "1px solid #2a2a4a",
+              borderColor: activeTab === id ? "#2a2a50" : "transparent",
+              borderBottom: activeTab === id ? "1px solid #13132a" : "1px solid #1e1e35",
               borderRadius: "8px 8px 0 0",
-              padding: "10px 20px",
-              color: activeTab === id ? "#e0e0ff" : "#6666aa",
+              padding: "9px 20px",
+              color: activeTab === id ? "#d0d0f0" : "#55558a",
               fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "13px",
+              fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",
               marginBottom: "-1px",
-              transition: "all 0.2s",
+              transition: "color 0.15s",
+              letterSpacing: "0.3px",
             }}>{label}</button>
           ))}
         </div>
 
         {activeTab === "overview" && (
           <>
-            {/* Category Filter */}
-            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "20px" }}>
-              <FilterPill active={filterCat === "all"} onClick={() => setFilterCat("all")} color="#8888aa">All</FilterPill>
+            {/* Category filter */}
+            <div style={{ display: "flex", gap: "7px", flexWrap: "wrap", marginBottom: "22px" }}>
+              <FilterPill active={filterCat === "all"} onClick={() => setFilterCat("all")} color="#7777aa">All</FilterPill>
               {Object.entries(categories).map(([k, v]) => (
                 <FilterPill key={k} active={filterCat === k} onClick={() => setFilterCat(k)} color={v.color}>{v.label}</FilterPill>
               ))}
             </div>
 
-            {/* App Grid */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+            {/* App grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: "14px", marginBottom: "28px" }}>
               {filtered.map(app => (
                 <div key={app.name} style={{ position: "relative" }}>
                   <AppCard app={app} onSelect={setSelectedApp} />
                   <button
                     onClick={(e) => { e.stopPropagation(); toggleCompare(app); }}
                     style={{
-                      position: "absolute", top: "12px", right: "12px",
-                      background: compareList.find(a => a.name === app.name) ? "#6366f1" : "#2a2a4a",
-                      border: "none", borderRadius: "6px",
-                      padding: "4px 10px", cursor: "pointer",
-                      color: "#e0e0ff", fontSize: "11px", fontWeight: 600,
+                      position: "absolute", top: "14px", right: "14px",
+                      background: compareList.find(a => a.name === app.name) ? "#6366f1" : "#1e1e38",
+                      border: `1px solid ${compareList.find(a => a.name === app.name) ? "#6366f1" : "#2e2e50"}`,
+                      borderRadius: "6px",
+                      padding: "3px 10px", cursor: "pointer",
+                      color: "#e0e0ff", fontSize: "10px", fontWeight: 700,
                       fontFamily: "'JetBrains Mono', monospace",
-                      transition: "all 0.2s",
+                      transition: "background 0.15s, border-color 0.15s",
+                      letterSpacing: "0.3px",
                     }}
                   >
-                    {compareList.find(a => a.name === app.name) ? "✓ Added" : "+ Compare"}
+                    {compareList.find(a => a.name === app.name) ? "✓" : "+"}
                   </button>
                 </div>
               ))}
@@ -1087,42 +1193,48 @@ export default function DecentralizedMessengerComparison() {
 
             {/* Legend */}
             <div style={{
-              background: "#1a1a2e", border: "1px solid #2a2a4a", borderRadius: "12px",
-              padding: "20px", marginTop: "8px",
+              background: "#0d0d1f", border: "1px solid #1e1e35", borderRadius: "12px",
+              padding: "20px",
             }}>
-              <h3 style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", color: "#6666aa", margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: "1px" }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "#55558a", marginBottom: "14px", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600 }}>
                 Architecture Spectrum
-              </h3>
-              <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+              </div>
+              <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", marginBottom: "14px" }}>
                 {Object.entries(categories).map(([k, v]) => (
-                  <div key={k} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: v.color }} />
-                    <span style={{ fontSize: "12px", color: "#9999bb" }}><strong style={{ color: v.color }}>{v.label}</strong> — {v.desc}</span>
+                  <div key={k} style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+                    <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: v.color, flexShrink: 0 }} />
+                    <span style={{ fontSize: "12px", color: "#7777aa" }}><strong style={{ color: v.color }}>{v.label}</strong> — {v.desc}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop: "16px", fontSize: "12px", color: "#6666aa", lineHeight: 1.7 }}>
-                <strong style={{ color: "#9999bb" }}>Key insight:</strong> Every app has centralization points. "Decentralized" is a spectrum, not a binary. Signal's centralized servers are transparent and well-audited. Matrix's federation defaults to matrix.org. Session's node network depends on token staking. SimpleX's default relays are run by one company. Even Briar depends on Tor's directory authorities. The question isn't whether centralization exists — it's whether you can escape it when needed.
-              </div>
+              <p style={{ fontSize: "12px", color: "#55558a", lineHeight: 1.7, margin: 0 }}>
+                <strong style={{ color: "#7777aa" }}>Key insight:</strong> Every app has centralization points. "Decentralized" is a spectrum, not a binary. Signal's centralized servers are transparent and well-audited. Matrix's federation defaults to matrix.org. Session's node network depends on token staking. SimpleX's default relays are run by one company. Even Briar depends on Tor's directory authorities. The question isn't whether centralization exists — it's whether you can escape it when needed.
+              </p>
             </div>
           </>
         )}
 
         {activeTab === "compare" && (
           <div>
-            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "16px" }}>
-              {apps.map(app => (
-                <button key={app.name} onClick={() => toggleCompare(app)} style={{
-                  background: compareList.find(a => a.name === app.name) ? `${categories[app.category].color}25` : "#1a1a2e",
-                  border: `1px solid ${compareList.find(a => a.name === app.name) ? categories[app.category].color : "#2a2a4a"}`,
-                  borderRadius: "8px", padding: "6px 14px", cursor: "pointer",
-                  color: compareList.find(a => a.name === app.name) ? categories[app.category].color : "#6666aa",
-                  fontSize: "12px", fontWeight: 600, fontFamily: "'JetBrains Mono', monospace",
-                  transition: "all 0.2s",
-                }}>
-                  {app.icon} {app.name}
-                </button>
-              ))}
+            <div style={{ display: "flex", gap: "7px", flexWrap: "wrap", marginBottom: "18px" }}>
+              {apps.map(app => {
+                const selected = !!compareList.find(a => a.name === app.name);
+                const color = categories[app.category].color;
+                return (
+                  <button key={app.name} onClick={() => toggleCompare(app)} style={{
+                    display: "inline-flex", alignItems: "center", gap: "7px",
+                    background: selected ? `${color}18` : "#111120",
+                    border: `1px solid ${selected ? color + "50" : "#1e1e35"}`,
+                    borderRadius: "8px", padding: "6px 12px", cursor: "pointer",
+                    color: selected ? color : "#6060a0",
+                    fontSize: "12px", fontWeight: 600, fontFamily: "'JetBrains Mono', monospace",
+                    transition: "all 0.15s",
+                  }}>
+                    <AppLogo name={app.name} size={18} />
+                    {app.name}
+                  </button>
+                );
+              })}
             </div>
             <ComparisonTable selected={compareList} />
           </div>
@@ -1137,16 +1249,17 @@ export default function DecentralizedMessengerComparison() {
 function FilterPill({ active, onClick, color, children }) {
   return (
     <button onClick={onClick} style={{
-      background: active ? `${color}20` : "transparent",
-      border: `1px solid ${active ? color : "#2a2a4a"}`,
+      background: active ? `${color}18` : "transparent",
+      border: `1px solid ${active ? color + "50" : "#1e1e35"}`,
       borderRadius: "20px",
       padding: "5px 14px",
-      color: active ? color : "#6666aa",
-      fontSize: "12px",
+      color: active ? color : "#55558a",
+      fontSize: "11px",
       fontWeight: 600,
       cursor: "pointer",
       fontFamily: "'JetBrains Mono', monospace",
-      transition: "all 0.2s",
+      transition: "all 0.15s",
+      letterSpacing: "0.3px",
     }}>{children}</button>
   );
 }

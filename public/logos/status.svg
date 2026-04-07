@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="50%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="46" fill="url(#g)"/>
+  <!-- S shape made of two interlocking teardrops, traced from official logo -->
+  <ellipse cx="112" cy="78" rx="36" ry="44" fill="white"/>
+  <ellipse cx="88" cy="122" rx="36" ry="44" fill="white"/>
+  <ellipse cx="112" cy="78" rx="22" ry="28" fill="url(#g)"/>
+  <ellipse cx="88" cy="122" rx="22" ry="28" fill="url(#g)"/>
+</svg>

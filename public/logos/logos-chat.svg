@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="46" fill="#0A0A14"/>
+  <!-- Lambda λ symbol, traced from official Logos network mark -->
+  <path fill="white" d="M 68,160 L 100,68 L 132,160 L 148,160 L 108,52 Q 104,42 100,42 Q 96,42 92,52 L 52,160 Z
+    M 78,130 L 122,130 L 116,112 L 84,112 Z"/>
+</svg>
