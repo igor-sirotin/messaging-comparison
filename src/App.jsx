@@ -373,13 +373,24 @@ function ComparisonTable({ selected }) {
   );
 
   return (
-    <div style={{ overflowX: "auto", marginTop: "16px" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+    <div style={{ overflowX: "auto", marginTop: "16px", borderRadius: "10px", border: "1px solid #1e1e38" }}>
+      <table style={{ borderCollapse: "collapse", fontSize: "13px", tableLayout: "fixed" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid #1e1e38" }}>
-            <th style={{ textAlign: "left", padding: "10px 16px", color: "#55558a", fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", textTransform: "uppercase", letterSpacing: "1px" }}>Feature</th>
+            <th style={{
+              textAlign: "left", padding: "10px 16px", color: "#55558a",
+              fontFamily: "'JetBrains Mono', monospace", fontSize: "10px",
+              textTransform: "uppercase", letterSpacing: "1px",
+              width: "140px", minWidth: "140px",
+              position: "sticky", left: 0, zIndex: 2,
+              background: "#0e0e1e",
+            }}>Feature</th>
             {selected.map(a => (
-              <th key={a.name} style={{ textAlign: "center", padding: "10px 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", minWidth: "150px" }}>
+              <th key={a.name} style={{
+                textAlign: "center", padding: "10px 14px",
+                fontFamily: "'JetBrains Mono', monospace", fontSize: "12px",
+                width: "120px", minWidth: "120px",
+              }}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
                   <AppLogo name={a.name} size={28} />
                   <span style={{ color: categories[a.category].color, fontSize: "11px", fontWeight: 700 }}>{a.name}</span>
@@ -391,13 +402,18 @@ function ComparisonTable({ selected }) {
         <tbody>
           {features.map((f, i) => (
             <tr key={f.key} style={{ background: i % 2 === 0 ? "#0e0e1e" : "transparent" }}>
-              <td style={{ padding: "9px 16px", color: "#7777aa", fontWeight: 500, borderBottom: "1px solid #14142a", whiteSpace: "nowrap", fontSize: "12px" }}>{f.label}</td>
+              <td style={{
+                padding: "9px 16px", color: "#7777aa", fontWeight: 500,
+                borderBottom: "1px solid #14142a", whiteSpace: "nowrap", fontSize: "12px",
+                position: "sticky", left: 0, zIndex: 1,
+                background: i % 2 === 0 ? "#0e0e1e" : "#09091a",
+              }}>{f.label}</td>
               {selected.map(a => (
                 <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
                   {f.bool ? (
                     <div style={{ display: "flex", justifyContent: "center" }}><BoolCell value={a[f.key]} /></div>
                   ) : (
-                    <span style={{ fontSize: "11.5px", lineHeight: 1.4 }}>{a[f.key]}</span>
+                    <span style={{ fontSize: "11px", lineHeight: 1.4 }}>{a[f.key]}</span>
                   )}
                 </td>
               ))}
@@ -413,7 +429,7 @@ function ComparisonTable({ selected }) {
 
 export default function DecentralizedMessengerComparison() {
   const [selectedApp, setSelectedApp] = useState(null);
-  const [compareList, setCompareList] = useState([]);
+  const [compareList, setCompareList] = useState(apps);
   const [activeTab, setActiveTab] = useState("overview");
   const [filterCat, setFilterCat] = useState("all");
 
@@ -421,7 +437,7 @@ export default function DecentralizedMessengerComparison() {
     setCompareList(prev =>
       prev.find(a => a.name === app.name)
         ? prev.filter(a => a.name !== app.name)
-        : prev.length < 5 ? [...prev, app] : prev
+        : [...prev, app]
     );
   };
 
@@ -436,7 +452,7 @@ export default function DecentralizedMessengerComparison() {
     }}>
       <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px" }}>
+      <div style={{ width: "100%", padding: "40px 24px", boxSizing: "border-box" }}>
 
         {/* Header */}
         <div style={{ marginBottom: "36px" }}>
