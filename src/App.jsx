@@ -563,6 +563,27 @@ export default function DecentralizedMessengerComparison() {
 
         {activeTab === "compare" && (
           <div>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px", minHeight: "24px" }}>
+              {compareList.length > 0 && (
+                <button onClick={() => setCompareList([])} style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  color: "#55558a",
+                  fontSize: "11px",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  textDecoration: "underline",
+                  textUnderlineOffset: "3px",
+                  transition: "color 0.15s",
+                }}
+                  onMouseEnter={e => e.currentTarget.style.color = "#ef4444"}
+                  onMouseLeave={e => e.currentTarget.style.color = "#55558a"}
+                >
+                  deselect all
+                </button>
+              )}
+            </div>
             <div style={{ display: "flex", gap: "7px", flexWrap: "wrap", marginBottom: "18px" }}>
               {apps.map(app => {
                 const selected = !!compareList.find(a => a.name === app.name);
