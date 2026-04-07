@@ -27,6 +27,8 @@ export const apps = [
     jurisdiction: "USA (Five Eyes)",
     audited: true,
     userBase: "~40M+ monthly users",
+    price: "Free",
+    maxDevices: "5 linked (phone + up to 4 companion devices)",
     rateLimiting: "Server-side, closed-source. Behavior-based detection + CAPTCHA challenges. Exact rates unpublished; reports suggest ~10 msgs before limits trigger for new contacts. Spam detection code kept private intentionally.",
     offlineDelivery: "Central servers queue messages. Recipient pulls queued messages on reconnect. Simple, reliable — the server is the store-and-forward node. This is exactly the centralization point.",
     pros: [
@@ -80,6 +82,8 @@ export const apps = [
     jurisdiction: "UK (Five Eyes)",
     audited: true,
     userBase: "~100M+ accounts across federation",
+    price: "Free (self-host) / Element One from €5/mo",
+    maxDevices: "Unlimited (per-device sessions)",
     rateLimiting: "Server-configurable. Synapse defaults: 0.2 msg/sec sustained, burst of 10. Admins can tune per-user, per-room, per-IP. Covers messages, registrations, joins, invites. No protocol-level enforcement — each homeserver sets its own rules.",
     offlineDelivery: "Recipient's homeserver stores messages in the room's event DAG. On reconnect, client syncs via /sync. Room replication across all participating homeservers means the message exists on multiple servers — even if sender's homeserver dies. Very robust, but messages persist on multiple servers (bad for metadata).",
     pros: [
@@ -133,6 +137,8 @@ export const apps = [
     jurisdiction: "Switzerland (moved from Australia in 2024)",
     audited: true,
     userBase: "~1M+ users",
+    price: "Free",
+    maxDevices: "Multi-device (up to a few linked devices via sync)",
     rateLimiting: "Service node level. Swarm nodes may reject excessive requests but no formal protocol-level rate limiting. Closed groups limited to ~100 members which implicitly caps message fan-out. No published rate numbers.",
     offlineDelivery: "Swarm architecture. Each Session ID is assigned to a swarm of 5–9 Service Nodes. Messages deposited via onion routing into recipient's swarm, stored redundantly for up to 14 days. Recipient polls swarm on reconnect, messages deleted after retrieval. Nodes act as temporary store-and-forward relays.",
     pros: [
@@ -187,6 +193,8 @@ export const apps = [
     jurisdiction: "UK (company), open protocol",
     audited: true,
     userBase: "~Hundreds of thousands",
+    price: "Free (open source)",
+    maxDevices: "Multiple (up to ~8, each gets independent keys)",
     rateLimiting: "SMP relay level. Relays can enforce per-connection queue rate limits. No published default rates. Self-hosted relays = your own rules. No protocol-level spam protection beyond queue-based isolation (each contact uses separate queue).",
     offlineDelivery: "SMP relay servers hold messages in per-connection queues. Relay chosen by recipient (not sender) stores message until retrieval, then deletes. Relay knows queue ID only, not sender identity. Recipient can self-host relay or use defaults.",
     pros: [
@@ -243,6 +251,8 @@ export const apps = [
     jurisdiction: "Open-source project (international contributors)",
     audited: true,
     userBase: "~50K-100K",
+    price: "Free (open source)",
+    maxDevices: "1 (no multi-device support)",
     rateLimiting: "None. Direct P2P connections only — no intermediary to enforce limits. Bluetooth/Wi-Fi range and Tor circuit limits provide implicit throughput caps. No spam protection mechanism.",
     offlineDelivery: "Original design requires both online simultaneously. Added mailbox feature: a trusted contact's always-on device (e.g., Raspberry Pi) receives messages on your behalf. Honest acknowledgment that store-and-forward requires something online — but major UX limitation.",
     pros: [
@@ -298,14 +308,15 @@ export const apps = [
     jurisdiction: "Switzerland (Logos/IFT)",
     audited: true,
     userBase: "~100K-500K",
-    rateLimiting: "RLN (Rate Limiting Nullifier) — privacy-preserving ZK proof-based. Network default: 100 msgs per 10-min epoch (configurable 20–600). Max message size: 150 KB. Membership registered on-chain (Sepolia testnet). Violators get disconnected. Global network cap: ~266 msg/sec (~6 Mbps).",
+    price: "Free",
+    maxDevices: "Multiple (Waku key sync; no hard cap published)",
+    rateLimiting: "No RLN on Status's Waku fleet — RLN is a Waku protocol feature but is not enabled in Status's production deployment. Relay nodes apply basic connection-level controls only. No protocol-level rate enforcement; spam protection relies on application-layer heuristics.",
     offlineDelivery: "Waku Store protocol. Messages propagate through relay network (libp2p GossipSub), Store nodes persist messages. Recipient queries Store nodes on reconnect. SDS (Scalable Data Sync) adds reliability layer — detects gaps, backfills from Store nodes. Store node incentivization still in development (ZK ticket-based payments PoC).",
     pros: [
       "Built on Waku — communication layer of the Logos tech stack",
       "Part of Ethereum's original 'Holy Trinity' vision (compute, storage, communication)",
       "Integrated crypto wallet and Web3 browser",
       "Communities feature for large decentralized groups",
-      "RLN (Rate Limiting Nullifier) for privacy-preserving DoS protection",
       "No phone number required, Ethereum key-based identity",
       "Active protocol research (mixnet, SDS reliability, incentivization)",
       "Recognized by Vitalik Buterin as continuation of Whisper",
@@ -354,6 +365,8 @@ export const apps = [
     jurisdiction: "Switzerland (IFT)",
     audited: false,
     userBase: "Pre-release — developer/dogfooding only",
+    price: "Free (open-source SDK)",
+    maxDevices: "Multiple (MLS-based; design supports many devices)",
     rateLimiting: "RLN (same as Waku) — ZK proof-based, privacy-preserving. SDK includes rate limit manager backed by SQLite. Configurable per-membership limits. Integrated into Reliable Channel API layer. Designed to be transparent to app developers.",
     offlineDelivery: "Same as Status/Waku: Waku Store protocol + SDS reliability layer. The Chat SDK integrates SDS at the Reliable Channel API level, handling gap detection and backfill transparently. Store node economics still being designed.",
     maturity: "MVP in development",
@@ -416,6 +429,8 @@ export const apps = [
     jurisdiction: "Decentralized (no single entity)",
     audited: false,
     userBase: "Millions (fragmented across servers)",
+    price: "Free (self-host or use public servers)",
+    maxDevices: "Unlimited (multiple OMEMO device keys per JID)",
     rateLimiting: "Server-configurable. Varies by implementation — ejabberd and Prosody both support rate limiting modules. No protocol-level standard. Typically configured per-connection or per-JID by server admin. No default rates in the XMPP spec itself.",
     offlineDelivery: "Server stores offline messages (XEP-0160), delivers on reconnect. MAM (Message Archive Management, XEP-0313) provides persistent server-side history. Straightforward server-side storage — your server admin holds your messages.",
     pros: [
@@ -471,6 +486,8 @@ export const apps = [
     jurisdiction: "Open-source project (no legal entity)",
     audited: false,
     userBase: "~10K-50K active",
+    price: "Free (open source)",
+    maxDevices: "1 (no multi-device support)",
     rateLimiting: "None formal. DHT protocol has implicit bandwidth limits. No spam protection mechanism at protocol level. Accepting a friend request is the only gate. Once connected, no rate enforcement.",
     offlineDelivery: "No solution. Both peers must be online simultaneously. No store-and-forward in protocol. Client retries when it detects peer's DHT status changes to online. Worst case for offline delivery among all compared apps.",
     pros: [
@@ -524,6 +541,8 @@ export const apps = [
     jurisdiction: "No legal entity — anonymous developer collective",
     audited: false,
     userBase: "Small — alpha stage, dev community + early adopters",
+    price: "Free (open source, GNU AGPL)",
+    maxDevices: "1 (no multi-device support)",
     rateLimiting: "None formal. DAG-based architecture provides some implicit limits (event graph propagation). No protocol-level spam protection. P2P network topology limits throughput naturally. Planned but not implemented.",
     offlineDelivery: "DAG-based event graph provides ~1 day message permanence. When a node joins the network, it syncs the DAG and retrieves missed messages. No infinite storage — messages eventually expire. Better than pure P2P (Tox) but not indefinite.",
     maturity: "Alpha (Jan 2025 release)",
@@ -586,6 +605,8 @@ export const apps = [
     jurisdiction: "USA",
     audited: true,
     userBase: "Developer ecosystem (used by Coinbase, Converse, etc.)",
+    price: "Free SDK; node operators charge ~$5/100K messages",
+    maxDevices: "Multiple (MLS-based multi-device)",
     rateLimiting: "Node-level enforcement. Details not fully published. MLS group operations have inherent overhead that limits throughput. Node operators can set policies. No ZK-based or protocol-level spam protection.",
     offlineDelivery: "Node operators store encrypted messages. Recipient retrieves from network on reconnect. Node operators paid (~$5/100K messages) — economic incentive for storage built into protocol from the start.",
     pros: [
@@ -639,6 +660,8 @@ export const apps = [
     jurisdiction: "Germany/EU (non-profit)",
     audited: true,
     userBase: "~100K+",
+    price: "Free (open source)",
+    maxDevices: "Multiple (IMAP/SMTP-based; each device polls independently)",
     rateLimiting: "Email server rate limits apply. Gmail: ~500 msgs/day, most SMTP servers have per-hour/per-day caps. Autocrypt key exchange adds overhead. Effectively inherits decades of email anti-spam infrastructure (SPF, DKIM, DMARC, greylisting).",
     offlineDelivery: "Email infrastructure. Message sits in recipient's IMAP inbox on their email server. 40+ years of battle-tested store-and-forward. Robust and reliable, but email server sees everything.",
     pros: [
@@ -693,6 +716,8 @@ export const apps = [
     jurisdiction: "UAE (Dubai) — moved from Russia via UK, BVI, Singapore",
     audited: false,
     userBase: "~900M+ monthly active users",
+    price: "Free / Telegram Premium ~$4.99/mo",
+    maxDevices: "Unlimited (cloud-based sync across all devices)",
     rateLimiting: "Server-side, not fully published. Bot API limits: 30 msg/sec to groups, 1 msg/sec per chat for bots. Forward limit: 5 chats at once for non-premium users to curb viral spread. Account banning for spam behavior.",
     offlineDelivery: "Telegram cloud stores all messages indefinitely (except Secret Chats, which are device-local). Messages sync instantly across all devices on reconnect. Cloud storage is the feature — and the privacy risk.",
     pros: [
@@ -750,6 +775,8 @@ export const apps = [
     jurisdiction: "USA (Meta Platforms, Inc.) — Five Eyes",
     audited: false,
     userBase: "~2B+ monthly active users",
+    price: "Free (owned by Meta)",
+    maxDevices: "5 (phone + up to 4 linked companion devices)",
     rateLimiting: "Server-side. Forward limit: max 5 chats at once (reduced from 250 after misinformation concerns). Bot/business API has published rate limits. Account banning for automated or spammy behavior.",
     offlineDelivery: "WhatsApp servers store encrypted messages for offline recipients (up to 30 days). Multi-device syncs via companion device protocol. Cloud backups to Google Drive / iCloud available — historically unencrypted, now optionally E2EE.",
     pros: [
@@ -807,6 +834,8 @@ export const apps = [
     jurisdiction: "Switzerland (Threema GmbH) — not Five Eyes",
     audited: true,
     userBase: "~13M+ users",
+    price: "~$5.99 one-time purchase (iOS/Android)",
+    maxDevices: "Multiple (Threema Web + desktop app)",
     rateLimiting: "Server-side, not published. Centralized infrastructure with standard DDoS and abuse controls. No protocol-level spam protection details disclosed publicly.",
     offlineDelivery: "Swiss servers queue messages for offline recipients. Standard centralized store-and-forward. Messages deleted from server after delivery confirmation.",
     pros: [
@@ -862,6 +891,8 @@ export const apps = [
     jurisdiction: "France (EU) — GDPR-compliant",
     audited: true,
     userBase: "Small — primarily French enterprise and government",
+    price: "Free (consumer) / Paid enterprise (Olvid for Business)",
+    maxDevices: "Multiple (up to 5 linked devices per identity)",
     rateLimiting: "Server-side, not published. Standard infrastructure controls. Server only routes ciphertext — cannot inspect content.",
     offlineDelivery: "Encrypted messages queued on Olvid servers until recipient reconnects. Server has no visibility into plaintext or metadata beyond routing ciphertext to the correct cryptographic identity.",
     pros: [
@@ -917,6 +948,8 @@ export const apps = [
     jurisdiction: "Switzerland (Wire Swiss GmbH) with US corporate structure (Wire Group Holdings)",
     audited: true,
     userBase: "~1M-5M users (consumer) + enterprise deployments",
+    price: "Free (consumer) / Wire for Business from ~€4/user/mo",
+    maxDevices: "8 linked devices",
     rateLimiting: "Server-side, not fully published. Standard infrastructure controls. MLS group operations have inherent computational overhead. Enterprise deployments can configure their own limits.",
     offlineDelivery: "Centralized cloud servers queue messages for offline recipients. Enterprise self-hosted deployments run their own Wire Server instances. Standard store-and-forward on sender's connected server.",
     pros: [
@@ -973,6 +1006,8 @@ export const apps = [
     jurisdiction: "Unknown (Singapore / Seychelles — unverified)",
     audited: false,
     userBase: "Very small — unverified figures",
+    price: "Free",
+    maxDevices: "Multiple (claimed, unverified)",
     rateLimiting: "Unclear. Relies on Beldex master node network for routing. No published rate limiting details. No independent verification of spam protection claims.",
     offlineDelivery: "Claimed similar to Session: messages stored in master node swarms for a limited period. No independent verification of implementation.",
     pros: [
@@ -1026,6 +1061,8 @@ export const apps = [
     jurisdiction: "USA",
     audited: false,
     userBase: "Early stage — growing Web3/DAO community",
+    price: "Free (gas costs for on-chain actions)",
+    maxDevices: "Multiple (wallet-based; any device with wallet access)",
     rateLimiting: "Blockchain transaction model provides implicit rate limiting — on-chain operations have gas costs. Off-chain message relay handles throughput. No published spam protection details.",
     offlineDelivery: "River Protocol nodes store messages. On-chain state ensures membership and access control; off-chain relay nodes handle message storage and delivery. Messages retrievable on reconnect via protocol relay.",
     pros: [

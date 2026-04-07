@@ -12,7 +12,7 @@ function AppLogo({ name, size = 36 }) {
         width={size}
         height={size}
         alt={name}
-        style={{ borderRadius: radius, display: "block", objectFit: "cover", flexShrink: 0 }}
+        style={{ borderRadius: radius, display: "block", objectFit: "contain", flexShrink: 0 }}
       />
     );
   }
@@ -246,10 +246,12 @@ function DetailModal({ app, onClose }) {
             ["Open Source", app.openSource],
             ["Identifier", app.identifier],
             ["Platforms", app.platforms],
-            ["Group Size", app.groupSize],
+            ["Group Size Limit", app.groupSize],
+            ["Max Devices", app.maxDevices],
+            ["Price", app.price],
+            ["User Base", app.userBase],
             ["Jurisdiction", app.jurisdiction],
             ["Funding", app.funding],
-            ["User Base", app.userBase],
             ...(app.maturity ? [["Maturity", app.maturity]] : []),
           ].map(([k, v]) => (
             <div key={k} style={{ background: "#14142a", borderRadius: "8px", padding: "10px 14px", border: "1px solid #1e1e38" }}>
@@ -360,6 +362,9 @@ function ComparisonTable({ selected }) {
     { key: "voiceVideo", label: "Voice/Video", bool: true },
     { key: "multiDevice", label: "Multi-Device", bool: true },
     { key: "audited", label: "Security Audited", bool: true },
+    { key: "userBase", label: "User Base" },
+    { key: "price", label: "Price" },
+    { key: "maxDevices", label: "Max Devices" },
     { key: "metadataProtection", label: "Metadata Protection" },
     { key: "rateLimiting", label: "Rate Limiting" },
     { key: "offlineDelivery", label: "Offline Delivery" },
