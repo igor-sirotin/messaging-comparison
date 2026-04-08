@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apps, logoFiles } from "./data/apps";
 import { categories } from "./data/categories";
 
@@ -347,28 +347,37 @@ function DetailModal({ app, onClose }) {
 // ── Comparison table ──────────────────────────────────────────────────────────
 
 function ComparisonTable({ selected }) {
+  const [activeTooltip, setActiveTooltip] = useState(null);
+
+  useEffect(() => {
+    if (!activeTooltip) return;
+    const handler = () => setActiveTooltip(null);
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [activeTooltip]);
+
   const features = [
-    { key: "architecture", label: "Architecture" },
-    { key: "encryption", label: "Encryption" },
-    { key: "identifier", label: "Identity" },
-    { key: "pfs", label: "Forward Secrecy", bool: true },
-    { key: "postCompromise", label: "Post-Compromise", bool: true },
-    { key: "quantumResistant", label: "Quantum Resistant", bool: true },
-    { key: "anonymousSignup", label: "Anonymous Sign-up", bool: true },
-    { key: "noPhoneRequired", label: "No Phone Required", bool: true },
-    { key: "selfHostable", label: "Self-Hostable", bool: true },
-    { key: "p2p", label: "Peer-to-Peer", bool: true },
-    { key: "offlineCapable", label: "Works Offline", bool: true },
-    { key: "voiceVideo", label: "Voice/Video", bool: true },
-    { key: "multiDevice", label: "Multi-Device", bool: true },
-    { key: "audited", label: "Security Audited", bool: true },
-    { key: "userBase", label: "User Base" },
-    { key: "price", label: "Price" },
-    { key: "maxDevices", label: "Max Devices" },
-    { key: "metadataProtection", label: "Metadata Protection" },
-    { key: "rateLimiting", label: "Rate Limiting" },
-    { key: "offlineDelivery", label: "Offline Delivery" },
-    { key: "jurisdiction", label: "Jurisdiction" },
+    { key: "architecture", label: "Architecture", tooltip: "How the system is structured — whether messages flow through servers controlled by a single company, a distributed network of servers, or directly between devices." },
+    { key: "encryption", label: "Encryption", tooltip: "The cryptographic algorithm used to scramble your messages so only the intended recipient can read them." },
+    { key: "identifier", label: "Identity", tooltip: "What identifies you on the network — a phone number ties your account to your real identity, while a public key or random ID allows more anonymity." },
+    { key: "pfs", label: "Forward Secrecy", tooltip: "Each message is encrypted with a fresh temporary key that is immediately discarded. If an attacker steals your keys today, they still can't read past messages." },
+    { key: "postCompromise", label: "Post-Compromise", tooltip: "Also called \"Break-in Recovery\" or \"Healing\". Even if an attacker briefly gained access to your device or keys, future messages automatically become secure again without any action from you." },
+    { key: "quantumResistant", label: "Quantum Resistant", tooltip: "Future quantum computers could break today's common encryption. Quantum-resistant algorithms are designed to remain secure even against that threat." },
+    { key: "anonymousSignup", label: "Anonymous Sign-up", tooltip: "You can create an account without providing a phone number, email, or any personal information that could be used to identify you." },
+    { key: "noPhoneRequired", label: "No Phone Required", tooltip: "You can use the app without linking it to a phone number. Many apps require phone verification, which ties your account to a real-world identity and carrier." },
+    { key: "selfHostable", label: "Self-Hostable", tooltip: "You or your organization can run your own server instead of relying on the developer's infrastructure. This gives you full control over your data and removes dependence on the original company." },
+    { key: "p2p", label: "Peer-to-Peer", tooltip: "Messages travel directly between your device and the recipient's device, without passing through any central server. This eliminates a central point of surveillance or failure." },
+    { key: "offlineCapable", label: "Works Offline", tooltip: "The app can function — at least partially — without an internet connection, typically over local Wi-Fi, Bluetooth, or by queuing messages for later delivery." },
+    { key: "voiceVideo", label: "Voice/Video", tooltip: "Supports encrypted voice and video calls in addition to text messaging." },
+    { key: "multiDevice", label: "Multi-Device", tooltip: "You can use your account on multiple devices (phone, tablet, desktop) simultaneously, with messages synced across all of them." },
+    { key: "audited", label: "Security Audited", tooltip: "Independent security researchers have reviewed the source code and protocol for vulnerabilities. A public audit report gives users third-party assurance that the security claims hold up." },
+    { key: "userBase", label: "User Base", tooltip: "Estimated number of active users. Larger networks are more useful for everyday communication but may also attract more scrutiny." },
+    { key: "price", label: "Price", tooltip: "The cost to use the app. Free apps are often funded by ads, data collection, or venture capital — each with its own trade-offs." },
+    { key: "maxDevices", label: "Max Devices", tooltip: "The maximum number of devices you can link to a single account at the same time." },
+    { key: "metadataProtection", label: "Metadata Protection", tooltip: "Encryption protects message content, but metadata — who you talk to, when, how often, and from where — can reveal as much as the messages themselves. Some apps take extra steps to hide this." },
+    { key: "rateLimiting", label: "Rate Limiting", tooltip: "Mechanisms to detect and block spam, abuse, or bulk messaging — such as requiring a phone number, proof-of-work puzzles, or token staking." },
+    { key: "offlineDelivery", label: "Offline Delivery", tooltip: "How messages are held and delivered when the recipient's device is offline — typically via server-side storage, with varying retention policies." },
+    { key: "jurisdiction", label: "Jurisdiction", tooltip: "The country whose laws govern the company. This determines which governments can compel the company to hand over data, respond to warrants, or restrict the service." },
   ];
 
   if (selected.length < 2) return (
@@ -386,7 +395,7 @@ function ComparisonTable({ selected }) {
               textAlign: "left", padding: "10px 16px", color: "#55558a",
               fontFamily: "'JetBrains Mono', monospace", fontSize: "10px",
               textTransform: "uppercase", letterSpacing: "1px",
-              width: "140px", minWidth: "140px",
+              width: "160px", minWidth: "160px",
               position: "sticky", left: 0, zIndex: 2,
               background: "#0e0e1e",
             }}>Feature</th>
@@ -409,19 +418,77 @@ function ComparisonTable({ selected }) {
             <tr key={f.key} style={{ background: i % 2 === 0 ? "#0e0e1e" : "transparent" }}>
               <td style={{
                 padding: "9px 16px", color: "#7777aa", fontWeight: 500,
-                borderBottom: "1px solid #14142a", whiteSpace: "nowrap", fontSize: "12px",
-                position: "sticky", left: 0, zIndex: 1,
+                borderBottom: "1px solid #14142a", fontSize: "12px",
+                position: "sticky", left: 0, zIndex: activeTooltip === f.key ? 20 : 1,
                 background: i % 2 === 0 ? "#0e0e1e" : "#09091a",
-              }}>{f.label}</td>
-              {selected.map(a => (
-                <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
-                  {f.bool ? (
-                    <div style={{ display: "flex", justifyContent: "center" }}><BoolCell value={a[f.key]} /></div>
-                  ) : (
-                    <span style={{ fontSize: "11px", lineHeight: 1.4 }}>{a[f.key]}</span>
+              }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "6px", position: "relative" }}>
+                  <span style={{ whiteSpace: "nowrap" }}>{f.label}</span>
+                  {f.tooltip && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setActiveTooltip(activeTooltip === f.key ? null : f.key); }}
+                      style={{
+                        flexShrink: 0,
+                        width: "14px", height: "14px",
+                        borderRadius: "50%",
+                        background: activeTooltip === f.key ? "#6366f130" : "transparent",
+                        border: `1px solid ${activeTooltip === f.key ? "#6366f1" : "#3a3a60"}`,
+                        color: activeTooltip === f.key ? "#6366f1" : "#55558a",
+                        fontSize: "8px", fontWeight: 700,
+                        cursor: "pointer",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        lineHeight: 1,
+                        padding: 0,
+                        transition: "all 0.15s",
+                      }}
+                    >?</button>
                   )}
-                </td>
-              ))}
+                  {activeTooltip === f.key && (
+                    <div style={{
+                      position: "absolute",
+                      top: "calc(100% + 6px)",
+                      left: 0,
+                      zIndex: 10,
+                      background: "#13132e",
+                      border: "1px solid #6366f135",
+                      borderRadius: "8px",
+                      padding: "10px 12px",
+                      width: "220px",
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+                      fontSize: "11px",
+                      color: "#a0a0cc",
+                      lineHeight: 1.55,
+                      fontFamily: "'Segoe UI', system-ui, sans-serif",
+                      fontWeight: 400,
+                    }}>
+                      <div style={{ position: "absolute", top: "-5px", left: "16px", width: "8px", height: "8px", background: "#13132e", border: "1px solid #6366f135", borderRight: "none", borderBottom: "none", transform: "rotate(45deg)" }} />
+                      {f.tooltip}
+                    </div>
+                  )}
+                </div>
+              </td>
+              {(() => {
+                const isBooleanFeature = selected.every((a) => {
+                  const value = a[f.key];
+                  return (
+                    typeof value === "boolean" ||
+                    value === null ||
+                    value === undefined ||
+                    value === "partial" ||
+                    value === "planned"
+                  );
+                });
+
+                return selected.map((a) => (
+                  <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
+                    {isBooleanFeature ? (
+                      <div style={{ display: "flex", justifyContent: "center" }}><BoolCell value={a[f.key]} /></div>
+                    ) : (
+                      <span style={{ fontSize: "11px", lineHeight: 1.4 }}>{a[f.key]}</span>
+                    )}
+                  </td>
+                ));
+              })()}
             </tr>
           ))}
         </tbody>
