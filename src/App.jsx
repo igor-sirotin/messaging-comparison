@@ -54,6 +54,58 @@ function BoolCell({ value }) {
   return <PartialIcon />;
 }
 
+function CellTooltip({ children, tooltip }) {
+  const [show, setShow] = useState(false);
+  if (!tooltip) return children;
+  return (
+    <div
+      style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "help" }}
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      {children}
+      <div style={{
+        position: "absolute",
+        top: "-3px",
+        right: "-4px",
+        width: "5px",
+        height: "5px",
+        borderRadius: "50%",
+        background: "#f59e0b",
+        opacity: show ? 1 : 0.55,
+        transition: "opacity 0.15s",
+        pointerEvents: "none",
+      }} />
+      {show && (
+        <div style={{
+          position: "absolute",
+          bottom: "calc(100% + 7px)",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 200,
+          background: "#13132e",
+          border: "1px solid #f59e0b40",
+          borderRadius: "8px",
+          padding: "9px 12px",
+          width: "210px",
+          boxShadow: "0 8px 28px rgba(0,0,0,0.6)",
+          fontSize: "11px",
+          color: "#a8a8cc",
+          lineHeight: 1.55,
+          fontFamily: "'Segoe UI', system-ui, sans-serif",
+          fontWeight: 400,
+          textAlign: "left",
+          pointerEvents: "none",
+          whiteSpace: "normal",
+        }}>
+          <div style={{ position: "absolute", bottom: "-5px", left: "50%", transform: "translateX(-50%) rotate(45deg)", width: "8px", height: "8px", background: "#13132e", border: "1px solid #f59e0b40", borderTop: "none", borderLeft: "none" }} />
+          {tooltip}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Feature tag — neutral, unified style ──────────────────────────────────────
 
 function FeatureTag({ label }) {
@@ -479,15 +531,20 @@ function ComparisonTable({ selected }) {
                   );
                 });
 
-                return selected.map((a) => (
+                return selected.map((a) => {
+                  const cellTip = a.cellTooltips?.[f.key];
+                  return (
                   <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
                     {isBooleanFeature ? (
-                      <div style={{ display: "flex", justifyContent: "center" }}><BoolCell value={a[f.key]} /></div>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                          <CellTooltip tooltip={cellTip}><BoolCell value={a[f.key]} /></CellTooltip>
+                        </div>
                     ) : (
                       <span style={{ fontSize: "11px", lineHeight: 1.4 }}>{a[f.key]}</span>
                     )}
                   </td>
-                ));
+                  );
+                });
               })()}
             </tr>
           ))}
