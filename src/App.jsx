@@ -412,6 +412,7 @@ function ComparisonTable({ selected }) {
     { key: "architecture", label: "Architecture", tooltip: "How the system is structured — whether messages flow through servers controlled by a single company, a distributed network of servers, or directly between devices." },
     { key: "encryption", label: "Encryption", tooltip: "The cryptographic algorithm used to scramble your messages so only the intended recipient can read them." },
     { key: "identifier", label: "Identity", tooltip: "What identifies you on the network — a phone number ties your account to your real identity, while a public key or random ID allows more anonymity." },
+    { key: "openSourceStatus", label: "Open Source", tooltip: "Whether the client, server, and/or protocol source code is publicly available for independent review. Open source code can be audited by anyone, making it harder to hide backdoors or security flaws." },
     { key: "pfs", label: "Forward Secrecy", tooltip: "Each message is encrypted with a fresh temporary key that is immediately discarded. If an attacker steals your keys today, they still can't read past messages." },
     { key: "postCompromise", label: "Post-Compromise", tooltip: "Also called \"Break-in Recovery\" or \"Healing\". Even if an attacker briefly gained access to your device or keys, future messages automatically become secure again without any action from you." },
     { key: "quantumResistant", label: "Quantum Resistant", tooltip: "Future quantum computers could break today's common encryption. Quantum-resistant algorithms are designed to remain secure even against that threat." },
@@ -421,6 +422,7 @@ function ComparisonTable({ selected }) {
     { key: "p2p", label: "Peer-to-Peer", tooltip: "Messages travel directly between your device and the recipient's device, without passing through any central server. This eliminates a central point of surveillance or failure." },
     { key: "offlineCapable", label: "Works Offline", tooltip: "The app can function — at least partially — without an internet connection, typically over local Wi-Fi, Bluetooth, or by queuing messages for later delivery." },
     { key: "voiceVideo", label: "Voice/Video", tooltip: "Supports encrypted voice and video calls in addition to text messaging." },
+    { key: "groupSize", label: "Group Chat Size", tooltip: "Maximum number of participants supported in a single group conversation. Hard limits reflect protocol or server constraints; soft limits indicate performance degradation above that threshold." },
     { key: "multiDevice", label: "Multi-Device", tooltip: "You can use your account on multiple devices (phone, tablet, desktop) simultaneously, with messages synced across all of them." },
     { key: "audited", label: "Security Audited", tooltip: "Independent security researchers have reviewed the source code and protocol for vulnerabilities. A public audit report gives users third-party assurance that the security claims hold up." },
     { key: "userBase", label: "User Base", tooltip: "Estimated number of active users. Larger networks are more useful for everyday communication but may also attract more scrutiny." },
@@ -534,15 +536,15 @@ function ComparisonTable({ selected }) {
                 return selected.map((a) => {
                   const cellTip = a.cellTooltips?.[f.key];
                   return (
-                  <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
-                    {isBooleanFeature ? (
+                    <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
+                      {isBooleanFeature ? (
                         <div style={{ display: "flex", justifyContent: "center" }}>
                           <CellTooltip tooltip={cellTip}><BoolCell value={a[f.key]} /></CellTooltip>
                         </div>
-                    ) : (
-                      <span style={{ fontSize: "11px", lineHeight: 1.4 }}>{a[f.key]}</span>
-                    )}
-                  </td>
+                      ) : (
+                        <span style={{ fontSize: "11px", lineHeight: 1.4 }}>{a[f.key]}</span>
+                      )}
+                    </td>
                   );
                 });
               })()}
