@@ -413,18 +413,18 @@ function ComparisonTable({ selected }) {
     { key: "encryption", label: "Encryption", tooltip: "The cryptographic algorithm used to scramble your messages so only the intended recipient can read them." },
     { key: "identifier", label: "Identity", tooltip: "What identifies you on the network — a phone number ties your account to your real identity, while a public key or random ID allows more anonymity." },
     { key: "openSourceStatus", label: "Open Source", tooltip: "Whether the client, server, and/or protocol source code is publicly available for independent review. Open source code can be audited by anyone, making it harder to hide backdoors or security flaws." },
-    { key: "pfs", label: "Forward Secrecy", tooltip: "Each message is encrypted with a fresh temporary key that is immediately discarded. If an attacker steals your keys today, they still can't read past messages." },
-    { key: "postCompromise", label: "Post-Compromise", tooltip: "Also called \"Break-in Recovery\" or \"Healing\". Even if an attacker briefly gained access to your device or keys, future messages automatically become secure again without any action from you." },
-    { key: "quantumResistant", label: "Quantum Resistant", tooltip: "Future quantum computers could break today's common encryption. Quantum-resistant algorithms are designed to remain secure even against that threat." },
-    { key: "anonymousSignup", label: "Anonymous Sign-up", tooltip: "You can create an account without providing a phone number, email, or any personal information that could be used to identify you." },
-    { key: "noPhoneRequired", label: "No Phone Required", tooltip: "You can use the app without linking it to a phone number. Many apps require phone verification, which ties your account to a real-world identity and carrier." },
-    { key: "selfHostable", label: "Self-Hostable", tooltip: "You or your organization can run your own server instead of relying on the developer's infrastructure. This gives you full control over your data and removes dependence on the original company." },
-    { key: "p2p", label: "Peer-to-Peer", tooltip: "Messages travel directly between your device and the recipient's device, without passing through any central server. This eliminates a central point of surveillance or failure." },
-    { key: "offlineCapable", label: "Works Offline", tooltip: "The app can function — at least partially — without an internet connection, typically over local Wi-Fi, Bluetooth, or by queuing messages for later delivery." },
-    { key: "voiceVideo", label: "Voice/Video", tooltip: "Supports encrypted voice and video calls in addition to text messaging." },
+    { key: "pfs", label: "Forward Secrecy", bool: true, tooltip: "Each message is encrypted with a fresh temporary key that is immediately discarded. If an attacker steals your keys today, they still can't read past messages.", good: "Past messages stay safe even if your keys are stolen later", bad: "A stolen key could decrypt your entire message history" },
+    { key: "postCompromise", label: "Post-Compromise", bool: true, tooltip: "Also called \"Break-in Recovery\" or \"Healing\". Even if an attacker briefly gained access to your device or keys, future messages automatically become secure again without any action from you.", good: "Encryption heals itself — future messages become secure again automatically", bad: "Once compromised, all future messages remain at risk until you take manual action" },
+    { key: "quantumResistant", label: "Quantum Resistant", bool: true, tooltip: "Future quantum computers could break today's common encryption. Quantum-resistant algorithms are designed to remain secure even against that threat.", good: "Messages stay secure even if quantum computers become powerful enough to break standard encryption", bad: "The encryption could be broken by a sufficiently powerful quantum computer" },
+    { key: "anonymousSignup", label: "Anonymous Sign-up", bool: true, tooltip: "You can create an account without providing a phone number, email, or any personal information that could be used to identify you.", good: "No personal info needed — your account can't be tied to your real identity at registration", bad: "Requires phone number, email, or other identifying info to sign up" },
+    { key: "noPhoneRequired", label: "No Phone Required", bool: true, tooltip: "You can use the app without linking it to a phone number. Many apps require phone verification, which ties your account to a real-world identity and carrier.", good: "Usable without a phone number — protects your identity and works without a SIM", bad: "Phone number required — links your account to a carrier and real-world identity" },
+    { key: "selfHostable", label: "Self-Hostable", bool: true, tooltip: "You or your organization can run your own server instead of relying on the developer's infrastructure. This gives you full control over your data and removes dependence on the original company.", good: "You can run your own server — full control over data, no dependence on the developer", bad: "Must trust the developer's servers; if they shut down or change policies, you have no alternative" },
+    { key: "p2p", label: "Peer-to-Peer", bool: true, tooltip: "Messages travel directly between your device and the recipient's device, without passing through any central server. This eliminates a central point of surveillance or failure.", good: "No central server involved — no single point of interception or failure", bad: "Messages route through central servers, which can log metadata or become a surveillance point" },
+    { key: "offlineCapable", label: "Works Offline", bool: true, tooltip: "The app can function — at least partially — without an internet connection, typically over local Wi-Fi, Bluetooth, or by queuing messages for later delivery.", good: "Can send messages over local networks or queue them without internet access", bad: "Requires an active internet connection to function at all" },
+    { key: "voiceVideo", label: "Voice/Video", bool: true, tooltip: "Supports encrypted voice and video calls in addition to text messaging.", good: "Encrypted calls available within the same app", bad: "Text only — no call support" },
     { key: "groupSize", label: "Group Chat Size", tooltip: "Maximum number of participants supported in a single group conversation. Hard limits reflect protocol or server constraints; soft limits indicate performance degradation above that threshold." },
-    { key: "multiDevice", label: "Multi-Device", tooltip: "You can use your account on multiple devices (phone, tablet, desktop) simultaneously, with messages synced across all of them." },
-    { key: "audited", label: "Security Audited", tooltip: "Independent security researchers have reviewed the source code and protocol for vulnerabilities. A public audit report gives users third-party assurance that the security claims hold up." },
+    { key: "multiDevice", label: "Multi-Device", bool: true, tooltip: "You can use your account on multiple devices (phone, tablet, desktop) simultaneously, with messages synced across all of them.", good: "One account works across all your devices simultaneously", bad: "Locked to a single device — switching requires migrating or losing your account" },
+    { key: "audited", label: "Security Audited", bool: true, tooltip: "Independent security researchers have reviewed the source code and protocol for vulnerabilities. A public audit report gives users third-party assurance that the security claims hold up.", good: "Security claims independently verified — known vulnerabilities were found and fixed", bad: "Unaudited — security claims rest solely on the developer's word" },
     { key: "userBase", label: "User Base", tooltip: "Estimated number of active users. Larger networks are more useful for everyday communication but may also attract more scrutiny." },
     { key: "price", label: "Price", tooltip: "The cost to use the app. Free apps are often funded by ads, data collection, or venture capital — each with its own trade-offs." },
     { key: "maxDevices", label: "Max Devices", tooltip: "The maximum number of devices you can link to a single account at the same time." },
@@ -517,6 +517,22 @@ function ComparisonTable({ selected }) {
                     }}>
                       <div style={{ position: "absolute", top: "-5px", left: "16px", width: "8px", height: "8px", background: "#13132e", border: "1px solid #6366f135", borderRight: "none", borderBottom: "none", transform: "rotate(45deg)" }} />
                       {f.tooltip}
+                      {(f.good || f.bad) && (
+                        <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #2a2a48", display: "flex", flexDirection: "column", gap: "4px" }}>
+                          {f.good && (
+                            <div style={{ display: "flex", gap: "6px", alignItems: "flex-start" }}>
+                              <span style={{ color: "#10b981", fontWeight: 700, flexShrink: 0 }}>✓</span>
+                              <span style={{ color: "#7a9a8a" }}>{f.good}</span>
+                            </div>
+                          )}
+                          {f.bad && (
+                            <div style={{ display: "flex", gap: "6px", alignItems: "flex-start" }}>
+                              <span style={{ color: "#ef4444", fontWeight: 700, flexShrink: 0 }}>✗</span>
+                              <span style={{ color: "#9a7a7a" }}>{f.bad}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
