@@ -111,9 +111,9 @@ function CellTooltip({ children, tooltip }) {
 function FeatureTag({ label }) {
   return (
     <span style={{
-      fontSize: "10px",
+      fontSize: "12px",
       fontWeight: 600,
-      padding: "2px 8px",
+      padding: "4px 10px",
       borderRadius: "4px",
       background: "#1e1e38",
       color: "#8888bb",
@@ -159,17 +159,17 @@ function AppCard({ app, onSelect }) {
 
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "10px" }}>
         <div style={{ flexShrink: 0 }}>
-          <AppLogo name={app.name} size={36} />
+          <AppLogo name={app.name} size={40} />
         </div>
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: "16px", color: "#e0e0ff", lineHeight: 1.2, marginBottom: "4px" }}>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: "18px", color: "#e0e0ff", lineHeight: 1.2, marginBottom: "4px" }}>
             {app.name}
           </div>
           <div style={{
             display: "inline-block",
-            padding: "1px 8px",
+            padding: "3px 10px",
             borderRadius: "20px",
-            fontSize: "10px",
+            fontSize: "12px",
             fontWeight: 600,
             letterSpacing: "0.5px",
             textTransform: "uppercase",
@@ -182,13 +182,13 @@ function AppCard({ app, onSelect }) {
         </div>
       </div>
 
-      <p style={{ color: "#7777aa", fontSize: "12.5px", lineHeight: 1.55, margin: "0 0 12px 0" }}>{app.tagline}</p>
+      <p style={{ color: "#7777aa", fontSize: "14px", lineHeight: 1.55, margin: "0 0 12px 0" }}>{app.tagline}</p>
 
       {app.warning && (
         <div style={{
           marginBottom: "10px", padding: "5px 9px", borderRadius: "5px",
           background: "#ef444410", border: "1px solid #ef444430",
-          fontSize: "10px", color: "#ef4444", fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "12px", color: "#ef4444", fontFamily: "'JetBrains Mono', monospace",
           display: "block", letterSpacing: "0.3px",
         }}>
           ⚠ {app.warning}
@@ -197,9 +197,9 @@ function AppCard({ app, onSelect }) {
 
       {app.maturity && (
         <div style={{
-          marginBottom: "10px", padding: "3px 9px", borderRadius: "5px",
+          marginBottom: "10px", padding: "4px 11px", borderRadius: "5px",
           background: "#f9731610", border: "1px solid #f9731630",
-          fontSize: "10px", color: "#f97316", fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "12px", color: "#f97316", fontFamily: "'JetBrains Mono', monospace",
           display: "inline-block", letterSpacing: "0.3px",
         }}>
           IN DEV — {app.maturity}
@@ -265,12 +265,12 @@ function DetailModal({ app, onClose }) {
 
         {/* App header */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "8px" }}>
-          <AppLogo name={app.name} size={48} />
+          <AppLogo name={app.name} size={56} />
           <div>
-            <h2 style={{ margin: "0 0 6px 0", fontFamily: "'JetBrains Mono', monospace", color: "#e8e8ff", fontSize: "24px", fontWeight: 700 }}>{app.name}</h2>
+            <h2 style={{ margin: "0 0 6px 0", fontFamily: "'JetBrains Mono', monospace", color: "#e8e8ff", fontSize: "28px", fontWeight: 700 }}>{app.name}</h2>
             <div style={{
               display: "inline-flex", alignItems: "center", gap: "6px",
-              padding: "3px 12px", borderRadius: "20px", fontSize: "11px",
+              padding: "4px 14px", borderRadius: "20px", fontSize: "12px",
               fontWeight: 600, letterSpacing: "0.5px", textTransform: "uppercase",
               background: `${cat.color}18`, color: cat.color, border: `1px solid ${cat.color}35`,
             }}>
@@ -280,12 +280,12 @@ function DetailModal({ app, onClose }) {
           </div>
         </div>
 
-        <p style={{ color: "#7777aa", fontSize: "13px", lineHeight: 1.6, margin: "0 0 24px 0" }}>{app.tagline}</p>
+        <p style={{ color: "#7777aa", fontSize: "15px", lineHeight: 1.6, margin: "0 0 24px 0" }}>{app.tagline}</p>
 
         {app.warning && (
-          <div style={{ marginBottom: "20px", padding: "12px 16px", background: "#ef444410", borderRadius: "8px", border: "1px solid #ef444430" }}>
-            <div style={{ color: "#ef4444", fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>⚠ Caution</div>
-            <div style={{ color: "#ff8888", fontSize: "12.5px", lineHeight: 1.6 }}>{app.warning}</div>
+          <div style={{ marginBottom: "20px", padding: "14px 18px", background: "#ef444410", borderRadius: "8px", border: "1px solid #ef444430" }}>
+            <div style={{ color: "#ef4444", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>⚠ Caution</div>
+            <div style={{ color: "#ff8888", fontSize: "14px", lineHeight: 1.6 }}>{app.warning}</div>
           </div>
         )}
 
@@ -306,15 +306,15 @@ function DetailModal({ app, onClose }) {
             ["Funding", app.funding],
             ...(app.maturity ? [["Maturity", app.maturity]] : []),
           ].map(([k, v]) => (
-            <div key={k} style={{ background: "#14142a", borderRadius: "8px", padding: "10px 14px", border: "1px solid #1e1e38" }}>
-              <div style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px", color: "#55558a" }}>{k}</div>
-              <div style={{ color: "#b8b8d8", fontSize: "12.5px", lineHeight: 1.4 }}>{v}</div>
+            <div key={k} style={{ background: "#14142a", borderRadius: "8px", padding: "12px 16px", border: "1px solid #1e1e38" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px", color: "#55558a" }}>{k}</div>
+              <div style={{ color: "#b8b8d8", fontSize: "14px", lineHeight: 1.4 }}>{v}</div>
             </div>
           ))}
         </div>
 
         {/* Feature booleans */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(145px, 1fr))", gap: "7px", marginBottom: "28px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "8px", marginBottom: "28px" }}>
           {[
             ["Perfect Forward Secrecy", app.pfs],
             ["Post-Compromise Security", app.postCompromise],
@@ -330,12 +330,12 @@ function DetailModal({ app, onClose }) {
             ["Security Audited", app.audited],
           ].map(([label, val]) => (
             <div key={label} style={{
-              background: "#14142a", borderRadius: "7px", padding: "8px 10px",
+              background: "#14142a", borderRadius: "7px", padding: "10px 12px",
               display: "flex", alignItems: "center", gap: "8px",
               border: "1px solid #1e1e38",
             }}>
               <BoolCell value={val} />
-              <span style={{ fontSize: "11px", color: "#8888bb", lineHeight: 1.3 }}>{label}</span>
+              <span style={{ fontSize: "12px", color: "#8888bb", lineHeight: 1.3 }}>{label}</span>
             </div>
           ))}
         </div>
@@ -344,11 +344,11 @@ function DetailModal({ app, onClose }) {
         <div style={{ marginBottom: "20px" }}>
           <SectionHeader color="#10b981">Strengths</SectionHeader>
           {app.pros.map((p, i) => (
-            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "7px", alignItems: "flex-start" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "4px" }}>
                 <circle cx="7" cy="7" r="3" fill="#10b981" opacity="0.7"/>
               </svg>
-              <span style={{ color: "#a8a8c8", fontSize: "13px", lineHeight: 1.55 }}>{p}</span>
+              <span style={{ color: "#a8a8c8", fontSize: "14px", lineHeight: 1.55 }}>{p}</span>
             </div>
           ))}
         </div>
@@ -357,11 +357,11 @@ function DetailModal({ app, onClose }) {
         <div style={{ marginBottom: "20px" }}>
           <SectionHeader color="#ef4444">Weaknesses</SectionHeader>
           {app.cons.map((c, i) => (
-            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "7px", alignItems: "flex-start" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "4px" }}>
                 <circle cx="7" cy="7" r="3" fill="#ef4444" opacity="0.7"/>
               </svg>
-              <span style={{ color: "#a8a8c8", fontSize: "13px", lineHeight: 1.55 }}>{c}</span>
+              <span style={{ color: "#a8a8c8", fontSize: "14px", lineHeight: 1.55 }}>{c}</span>
             </div>
           ))}
         </div>
@@ -370,12 +370,12 @@ function DetailModal({ app, onClose }) {
         <div style={{ marginBottom: "24px" }}>
           <SectionHeader color="#f59e0b">Centralization Points</SectionHeader>
           {app.centralizationPoints.map((c, i) => (
-            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+            <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "7px", alignItems: "flex-start" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: "4px" }}>
                 <path d="M7 2.5 L7 8" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round"/>
                 <circle cx="7" cy="10.5" r="1.2" fill="#f59e0b"/>
               </svg>
-              <span style={{ color: "#a8a8c8", fontSize: "13px", lineHeight: 1.55 }}>{c}</span>
+              <span style={{ color: "#a8a8c8", fontSize: "14px", lineHeight: 1.55 }}>{c}</span>
             </div>
           ))}
         </div>
@@ -386,9 +386,9 @@ function DetailModal({ app, onClose }) {
           ["Rate Limiting & Spam Protection", app.rateLimiting],
           ["Offline Message Delivery", app.offlineDelivery],
         ].filter(([, v]) => v).map(([label, val]) => (
-          <div key={label} style={{ marginBottom: "10px", padding: "12px 16px", background: "#14142a", borderRadius: "8px", border: "1px solid #1e1e38" }}>
-            <div style={{ color: "#55558a", fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "5px" }}>{label}</div>
-            <div style={{ color: "#b0b0cc", fontSize: "12.5px", lineHeight: 1.6 }}>{val}</div>
+          <div key={label} style={{ marginBottom: "12px", padding: "14px 18px", background: "#14142a", borderRadius: "8px", border: "1px solid #1e1e38" }}>
+            <div style={{ color: "#55558a", fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "6px" }}>{label}</div>
+            <div style={{ color: "#b0b0cc", fontSize: "14px", lineHeight: 1.6 }}>{val}</div>
           </div>
         ))}
       </div>
@@ -435,19 +435,19 @@ function ComparisonTable({ selected }) {
   ];
 
   if (selected.length < 2) return (
-    <div style={{ textAlign: "center", padding: "60px 40px", fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", color: "#55558a" }}>
+    <div style={{ textAlign: "center", padding: "80px 40px", fontFamily: "'JetBrains Mono', monospace", fontSize: "15px", color: "#55558a" }}>
       Select 2 or more apps above to compare side-by-side
     </div>
   );
 
   return (
     <div style={{ overflowX: "auto", marginTop: "16px", borderRadius: "10px", border: "1px solid #1e1e38" }}>
-      <table style={{ borderCollapse: "collapse", fontSize: "13px", tableLayout: "fixed" }}>
+      <table style={{ borderCollapse: "collapse", fontSize: "14px", tableLayout: "fixed" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid #1e1e38" }}>
             <th style={{
-              textAlign: "left", padding: "10px 16px", color: "#55558a",
-              fontFamily: "'JetBrains Mono', monospace", fontSize: "10px",
+              textAlign: "left", padding: "12px 18px", color: "#55558a",
+              fontFamily: "'JetBrains Mono', monospace", fontSize: "11px",
               textTransform: "uppercase", letterSpacing: "1px",
               width: "160px", minWidth: "160px",
               position: "sticky", left: 0, zIndex: 2,
@@ -455,13 +455,13 @@ function ComparisonTable({ selected }) {
             }}>Feature</th>
             {selected.map(a => (
               <th key={a.name} style={{
-                textAlign: "center", padding: "10px 14px",
-                fontFamily: "'JetBrains Mono', monospace", fontSize: "12px",
-                width: "120px", minWidth: "120px",
+                textAlign: "center", padding: "12px 16px",
+                fontFamily: "'JetBrains Mono', monospace", fontSize: "13px",
+                width: "130px", minWidth: "130px",
               }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
-                  <AppLogo name={a.name} size={28} />
-                  <span style={{ color: categories[a.category].color, fontSize: "11px", fontWeight: 700 }}>{a.name}</span>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                  <AppLogo name={a.name} size={32} />
+                  <span style={{ color: categories[a.category].color, fontSize: "12px", fontWeight: 700 }}>{a.name}</span>
                 </div>
               </th>
             ))}
@@ -471,8 +471,8 @@ function ComparisonTable({ selected }) {
           {features.map((f, i) => (
             <tr key={f.key} style={{ background: i % 2 === 0 ? "#0e0e1e" : "transparent" }}>
               <td style={{
-                padding: "9px 16px", color: "#7777aa", fontWeight: 500,
-                borderBottom: "1px solid #14142a", fontSize: "12px",
+                padding: "11px 18px", color: "#7777aa", fontWeight: 500,
+                borderBottom: "1px solid #14142a", fontSize: "13px",
                 position: "sticky", left: 0, zIndex: activeTooltip === f.key ? 20 : 1,
                 background: i % 2 === 0 ? "#0e0e1e" : "#09091a",
               }}>
@@ -506,10 +506,10 @@ function ComparisonTable({ selected }) {
                       background: "#13132e",
                       border: "1px solid #6366f135",
                       borderRadius: "8px",
-                      padding: "10px 12px",
-                      width: "220px",
+                      padding: "12px 14px",
+                      width: "240px",
                       boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
-                      fontSize: "11px",
+                      fontSize: "12px",
                       color: "#a0a0cc",
                       lineHeight: 1.55,
                       fontFamily: "'Segoe UI', system-ui, sans-serif",
@@ -558,7 +558,7 @@ function ComparisonTable({ selected }) {
                           <CellTooltip tooltip={cellTip}><BoolCell value={a[f.key]} /></CellTooltip>
                         </div>
                       ) : (
-                        <span style={{ fontSize: "11px", lineHeight: 1.4 }}>{a[f.key]}</span>
+                        <span style={{ fontSize: "13px", lineHeight: 1.4 }}>{a[f.key]}</span>
                       )}
                     </td>
                   );
@@ -603,14 +603,14 @@ export default function DecentralizedMessengerComparison() {
 
         {/* Header */}
         <div style={{ marginBottom: "36px" }}>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "#6366f1", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", color: "#6366f1", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", marginBottom: "12px" }}>
             Comparative Analysis
           </div>
           <h1 style={{
             fontFamily: "'JetBrains Mono', monospace",
-            fontSize: "clamp(22px, 4vw, 34px)",
+            fontSize: "clamp(28px, 5vw, 42px)",
             fontWeight: 700,
-            margin: "0 0 10px 0",
+            margin: "0 0 14px 0",
             background: "linear-gradient(135deg, #d0d0f8 0%, #7878e0 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
@@ -618,7 +618,7 @@ export default function DecentralizedMessengerComparison() {
           }}>
             Decentralized Messaging Apps
           </h1>
-          <p style={{ color: "#6060a0", fontSize: "13.5px", maxWidth: "680px", lineHeight: 1.7, margin: 0 }}>
+          <p style={{ color: "#6060a0", fontSize: "15px", maxWidth: "720px", lineHeight: 1.7, margin: 0 }}>
             An honest look at {apps.length} messaging platforms — their architectures, encryption strengths, centralization trade-offs, and real-world drawbacks. Nothing is truly decentralized; the question is where the centralization hides.
           </p>
         </div>
@@ -632,10 +632,10 @@ export default function DecentralizedMessengerComparison() {
               borderColor: activeTab === id ? "#2a2a50" : "transparent",
               borderBottom: activeTab === id ? "1px solid #13132a" : "1px solid #1e1e35",
               borderRadius: "8px 8px 0 0",
-              padding: "9px 20px",
+              padding: "11px 24px",
               color: activeTab === id ? "#d0d0f0" : "#55558a",
               fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "12px",
+              fontSize: "13px",
               fontWeight: 600,
               cursor: "pointer",
               marginBottom: "-1px",
@@ -656,19 +656,19 @@ export default function DecentralizedMessengerComparison() {
             </div>
 
             {/* App grid */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: "14px", marginBottom: "28px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: "16px", marginBottom: "28px" }}>
               {filtered.map(app => (
                 <div key={app.name} style={{ position: "relative" }}>
                   <AppCard app={app} onSelect={setSelectedApp} />
                   <button
                     onClick={(e) => { e.stopPropagation(); toggleCompare(app); }}
                     style={{
-                      position: "absolute", top: "14px", right: "14px",
+                      position: "absolute", top: "16px", right: "16px",
                       background: compareList.find(a => a.name === app.name) ? "#6366f1" : "#1e1e38",
                       border: `1px solid ${compareList.find(a => a.name === app.name) ? "#6366f1" : "#2e2e50"}`,
                       borderRadius: "6px",
-                      padding: "3px 10px", cursor: "pointer",
-                      color: "#e0e0ff", fontSize: "10px", fontWeight: 700,
+                      padding: "4px 12px", cursor: "pointer",
+                      color: "#e0e0ff", fontSize: "11px", fontWeight: 700,
                       fontFamily: "'JetBrains Mono', monospace",
                       transition: "background 0.15s, border-color 0.15s",
                       letterSpacing: "0.3px",
@@ -683,20 +683,20 @@ export default function DecentralizedMessengerComparison() {
             {/* Legend */}
             <div style={{
               background: "#0d0d1f", border: "1px solid #1e1e35", borderRadius: "12px",
-              padding: "20px",
+              padding: "24px",
             }}>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "#55558a", marginBottom: "14px", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", color: "#55558a", marginBottom: "18px", textTransform: "uppercase", letterSpacing: "1.5px", fontWeight: 600 }}>
                 Architecture Spectrum
               </div>
-              <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", marginBottom: "14px" }}>
+              <div style={{ display: "flex", gap: "20px", flexWrap: "wrap", marginBottom: "20px" }}>
                 {Object.entries(categories).map(([k, v]) => (
-                  <div key={k} style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-                    <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: v.color, flexShrink: 0 }} />
-                    <span style={{ fontSize: "12px", color: "#7777aa" }}><strong style={{ color: v.color }}>{v.label}</strong> — {v.desc}</span>
+                  <div key={k} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: v.color, flexShrink: 0 }} />
+                    <span style={{ fontSize: "13px", color: "#7777aa" }}><strong style={{ color: v.color }}>{v.label}</strong> — {v.desc}</span>
                   </div>
                 ))}
               </div>
-              <p style={{ fontSize: "12px", color: "#55558a", lineHeight: 1.7, margin: 0 }}>
+              <p style={{ fontSize: "13px", color: "#55558a", lineHeight: 1.7, margin: 0 }}>
                 <strong style={{ color: "#7777aa" }}>Key insight:</strong> Every app has centralization points. "Decentralized" is a spectrum, not a binary. Signal's centralized servers are transparent and well-audited. Matrix's federation defaults to matrix.org. Session's node network depends on token staking. SimpleX's default relays are run by one company. Even Briar depends on Tor's directory authorities. The question isn't whether centralization exists — it's whether you can escape it when needed.
               </p>
             </div>
@@ -713,7 +713,7 @@ export default function DecentralizedMessengerComparison() {
                   padding: 0,
                   cursor: "pointer",
                   color: "#55558a",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontFamily: "'JetBrains Mono', monospace",
                   textDecoration: "underline",
                   textUnderlineOffset: "3px",
@@ -732,15 +732,15 @@ export default function DecentralizedMessengerComparison() {
                 const color = categories[app.category].color;
                 return (
                   <button key={app.name} onClick={() => toggleCompare(app)} style={{
-                    display: "inline-flex", alignItems: "center", gap: "7px",
+                    display: "inline-flex", alignItems: "center", gap: "8px",
                     background: selected ? `${color}18` : "#111120",
                     border: `1px solid ${selected ? color + "50" : "#1e1e35"}`,
-                    borderRadius: "8px", padding: "6px 12px", cursor: "pointer",
+                    borderRadius: "8px", padding: "7px 14px", cursor: "pointer",
                     color: selected ? color : "#6060a0",
-                    fontSize: "12px", fontWeight: 600, fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "13px", fontWeight: 600, fontFamily: "'JetBrains Mono', monospace",
                     transition: "all 0.15s",
                   }}>
-                    <AppLogo name={app.name} size={18} />
+                    <AppLogo name={app.name} size={20} />
                     {app.name}
                   </button>
                 );
@@ -762,9 +762,9 @@ function FilterPill({ active, onClick, color, children }) {
       background: active ? `${color}18` : "transparent",
       border: `1px solid ${active ? color + "50" : "#1e1e35"}`,
       borderRadius: "20px",
-      padding: "5px 14px",
+      padding: "6px 16px",
       color: active ? color : "#55558a",
-      fontSize: "11px",
+      fontSize: "12px",
       fontWeight: 600,
       cursor: "pointer",
       fontFamily: "'JetBrains Mono', monospace",
