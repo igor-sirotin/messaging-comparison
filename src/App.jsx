@@ -54,9 +54,13 @@ function BoolCell({ value }) {
   return <PartialIcon />;
 }
 
-function CellTooltip({ children, tooltip }) {
+function CellTooltip({ children, tooltip, placement = "top" }) {
   const [show, setShow] = useState(false);
   if (!tooltip) return children;
+  const summary = typeof tooltip === "string" ? tooltip : tooltip.summary;
+  const good = typeof tooltip === "object" ? tooltip.good : null;
+  const bad = typeof tooltip === "object" ? tooltip.bad : null;
+  const isTop = placement === "top";
   return (
     <div
       style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "help" }}
@@ -79,10 +83,10 @@ function CellTooltip({ children, tooltip }) {
       {show && (
         <div style={{
           position: "absolute",
-          bottom: "calc(100% + 7px)",
+          ...(isTop ? { bottom: "calc(100% + 7px)" } : { top: "calc(100% + 7px)" }),
           left: "50%",
           transform: "translateX(-50%)",
-          zIndex: 200,
+          zIndex: 1200,
           background: "#13132e",
           border: "1px solid #f59e0b40",
           borderRadius: "8px",
@@ -98,8 +102,33 @@ function CellTooltip({ children, tooltip }) {
           pointerEvents: "none",
           whiteSpace: "normal",
         }}>
-          <div style={{ position: "absolute", bottom: "-5px", left: "50%", transform: "translateX(-50%) rotate(45deg)", width: "8px", height: "8px", background: "#13132e", border: "1px solid #f59e0b40", borderTop: "none", borderLeft: "none" }} />
-          {tooltip}
+          <div style={{
+            position: "absolute",
+            ...(isTop ? { bottom: "-5px", borderTop: "none", borderLeft: "none" } : { top: "-5px", borderRight: "none", borderBottom: "none" }),
+            left: "50%",
+            transform: "translateX(-50%) rotate(45deg)",
+            width: "8px",
+            height: "8px",
+            background: "#13132e",
+            border: "1px solid #f59e0b40",
+          }} />
+          <div>{summary}</div>
+          {(good || bad) && (
+            <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #2a2a48", display: "flex", flexDirection: "column", gap: "4px" }}>
+              {good && (
+                <div style={{ display: "flex", gap: "6px", alignItems: "flex-start" }}>
+                  <span style={{ color: "#10b981", fontWeight: 700, flexShrink: 0 }}>+</span>
+                  <span style={{ color: "#88b89f" }}>{good}</span>
+                </div>
+              )}
+              {bad && (
+                <div style={{ display: "flex", gap: "6px", alignItems: "flex-start" }}>
+                  <span style={{ color: "#ef4444", fontWeight: 700, flexShrink: 0 }}>-</span>
+                  <span style={{ color: "#c89a9a" }}>{bad}</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -401,6 +430,83 @@ function DetailModal({ app, onClose }) {
 function ComparisonTable({ selected }) {
   const [activeTooltip, setActiveTooltip] = useState(null);
 
+  const architectureTradeoffs = {
+    centralized: {
+      better: "Faster UX consistency and simpler reliability than federated/decentralized networks.",
+      worse: "Higher censorship and metadata risk than federated, decentralized, and P2P models.",
+    },
+    federated: {
+      better: "More exit options and self-host control than centralized services.",
+      worse: "Heavier metadata exposure and ops complexity than centralized and pure P2P tools.",
+    },
+    decentralized: {
+      better: "Harder to shut down globally and usually stronger anonymity than centralized/federated defaults.",
+      worse: "Often weaker UX, smaller network effects, and more protocol complexity than centralized apps.",
+    },
+    p2p: {
+      better: "Minimal server trust and strongest local/off-grid resilience versus server-dependent models.",
+      worse: "Availability and feature trade-offs (sync, calls, scale) versus centralized/federated systems.",
+    },
+    web3: {
+      better: "Portable identity/incentives across ecosystems versus closed centralized platforms.",
+      worse: "Token/governance friction and chain dependency compared with non-web3 messengers.",
+    },
+    prerelease: {
+      better: "Can adopt modern cryptography and architecture choices earlier than incumbents.",
+      worse: "Immature security posture and UX stability compared with production-ready alternatives.",
+    },
+  };
+
+  const getTextCellInsight = (app, feature) => {
+    switch (feature.key) {
+      case "architecture": {
+        const tradeoff = architectureTradeoffs[app.category];
+        return {
+          summary: `${app.architecture}. ${categories[app.category]?.desc || ""}`,
+          good: tradeoff?.better,
+          bad: tradeoff?.worse,
+        };
+      }
+      case "identifier": {
+        if (/phone number/i.test(app.identifier)) {
+          return {
+            summary: app.identifier,
+            good: "Easy contact discovery and account recovery because people already know how to use phone-number identity.",
+            bad: "Ties the account to a real-world identifier that leaks social graph and makes anonymous use much harder.",
+          };
+        }
+        if (/matrix id/i.test(app.identifier)) {
+          return {
+            summary: app.identifier,
+            good: "Portable across homeservers and more pseudonymous than phone-number identity.",
+            bad: "Still exposes a stable global handle, which makes correlation and social-graph mapping easier than no-identity designs.",
+          };
+        }
+        if (/session id/i.test(app.identifier)) {
+          return {
+            summary: app.identifier,
+            good: "Random identifiers avoid tying the account to SIM cards, emails, or real names.",
+            bad: "A persistent global ID can still be correlated over time even if it is not directly tied to your real identity.",
+          };
+        }
+        if (/none/i.test(app.identifier)) {
+          return {
+            summary: app.identifier,
+            good: "No global user ID makes contact-graph tracking much harder than phone-number or username-based systems.",
+            bad: "Discovery and onboarding are less convenient because contacts must be exchanged out of band.",
+          };
+        }
+        return {
+          summary: app.identifier,
+          good: app.noPhoneRequired ? "Less tied to real-world identity than phone-number systems." : undefined,
+          bad: app.anonymousSignup ? "Can still create usability and discovery friction versus mainstream identifiers." : "Likely leaks more account linkage than anonymous identifiers.",
+        };
+      }
+      default:
+        return null;
+    }
+  };
+
   useEffect(() => {
     if (!activeTooltip) return;
     const handler = () => setActiveTooltip(null);
@@ -551,14 +657,20 @@ function ComparisonTable({ selected }) {
 
                 return selected.map((a) => {
                   const cellTip = a.cellTooltips?.[f.key];
+                  const textCellInsight = !isBooleanFeature ? getTextCellInsight(a, f) : null;
+                  const tipPlacement = i === 0 ? "bottom" : "top";
                   return (
                     <td key={a.name} style={{ padding: "9px 14px", textAlign: "center", color: "#b0b0cc", borderBottom: "1px solid #14142a" }}>
                       {isBooleanFeature ? (
                         <div style={{ display: "flex", justifyContent: "center" }}>
-                          <CellTooltip tooltip={cellTip}><BoolCell value={a[f.key]} /></CellTooltip>
+                          <CellTooltip tooltip={cellTip} placement={tipPlacement}><BoolCell value={a[f.key]} /></CellTooltip>
                         </div>
                       ) : (
-                        <span style={{ fontSize: "13px", lineHeight: 1.4 }}>{a[f.key]}</span>
+                        <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                          <CellTooltip tooltip={textCellInsight} placement={tipPlacement}>
+                            <span style={{ fontSize: "13px", lineHeight: 1.4, textAlign: "left" }}>{a[f.key]}</span>
+                          </CellTooltip>
+                        </div>
                       )}
                     </td>
                   );
